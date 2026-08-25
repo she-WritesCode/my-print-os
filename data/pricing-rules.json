@@ -1,0 +1,194 @@
+[
+  {
+    "id": "rule-dtf-tier1-a4",
+    "service": "srv-dtf-tshirt",
+    "pricingEngine": "matrix",
+    "sizeArea": "A4",
+    "minQuantity": 1,
+    "maxQuantity": 20,
+    "unitPrice": 2500,
+    "targetMarginPercent": 40
+  },
+  {
+    "id": "rule-dtf-tier2-a4",
+    "service": "srv-dtf-tshirt",
+    "pricingEngine": "matrix",
+    "sizeArea": "A4",
+    "minQuantity": 21,
+    "maxQuantity": 100,
+    "unitPrice": 2000,
+    "targetMarginPercent": 40
+  },
+  {
+    "id": "rule-dtf-tier3-a4",
+    "service": "srv-dtf-tshirt",
+    "pricingEngine": "matrix",
+    "sizeArea": "A4",
+    "minQuantity": 101,
+    "maxQuantity": null,
+    "unitPrice": 1500,
+    "targetMarginPercent": 35
+  },
+  {
+    "id": "rule-dtf-tier1-a3",
+    "service": "srv-dtf-tshirt",
+    "pricingEngine": "matrix",
+    "sizeArea": "A3",
+    "minQuantity": 1,
+    "maxQuantity": 20,
+    "unitPrice": 3500,
+    "targetMarginPercent": 40
+  },
+  {
+    "id": "rule-dtf-tier2-a3",
+    "service": "srv-dtf-tshirt",
+    "pricingEngine": "matrix",
+    "sizeArea": "A3",
+    "minQuantity": 21,
+    "maxQuantity": 100,
+    "unitPrice": 3000,
+    "targetMarginPercent": 40
+  },
+  {
+    "id": "rule-dtf-tier3-a3",
+    "service": "srv-dtf-tshirt",
+    "pricingEngine": "matrix",
+    "sizeArea": "A3",
+    "minQuantity": 101,
+    "maxQuantity": null,
+    "unitPrice": 2500,
+    "targetMarginPercent": 35
+  },
+  {
+    "id": "rule-screen-tier1",
+    "service": "srv-screen-tshirt",
+    "pricingEngine": "matrix",
+    "sizeArea": "A4",
+    "minQuantity": 1,
+    "maxQuantity": 20,
+    "unitPrice": 1500,
+    "targetMarginPercent": 40
+  },
+  {
+    "id": "rule-screen-tier2",
+    "service": "srv-screen-tshirt",
+    "pricingEngine": "matrix",
+    "sizeArea": "A4",
+    "minQuantity": 21,
+    "maxQuantity": 100,
+    "unitPrice": 1000,
+    "targetMarginPercent": 40
+  },
+  {
+    "id": "rule-screen-tier3",
+    "service": "srv-screen-tshirt",
+    "pricingEngine": "matrix",
+    "sizeArea": "A4",
+    "minQuantity": 101,
+    "maxQuantity": null,
+    "unitPrice": 700,
+    "targetMarginPercent": 40
+  },
+  {
+    "id": "rule-embroidery-logo",
+    "service": "srv-embroidery-polo",
+    "pricingEngine": "matrix",
+    "sizeArea": "Pocket",
+    "minQuantity": 1,
+    "maxQuantity": 20,
+    "unitPrice": 2000,
+    "targetMarginPercent": 45
+  },
+  {
+    "id": "rule-embroidery-logo-tier2",
+    "service": "srv-embroidery-polo",
+    "pricingEngine": "matrix",
+    "sizeArea": "Pocket",
+    "minQuantity": 21,
+    "maxQuantity": null,
+    "unitPrice": 1500,
+    "targetMarginPercent": 45
+  },
+  {
+    "id": "rule-flex-banner-area",
+    "service": "srv-flex-banner",
+    "pricingEngine": "area",
+    "sizeArea": "Custom Sqft",
+    "ratePerUnitArea": 800,
+    "targetMarginPercent": 45
+  },
+  {
+    "id": "rule-rollup-banner-area",
+    "service": "srv-rollup-banner",
+    "pricingEngine": "area",
+    "sizeArea": "3x7 ft Standard",
+    "ratePerUnitArea": 1000,
+    "targetMarginPercent": 45
+  },
+  {
+    "id": "rule-sav-sticker-area",
+    "service": "srv-sav-sticker",
+    "pricingEngine": "area",
+    "sizeArea": "Custom Sqft",
+    "ratePerUnitArea": 750,
+    "targetMarginPercent": 50
+  },
+  {
+    "id": "rule-flyers-a5-single-100",
+    "service": "srv-a5-flyers",
+    "pricingEngine": "matrix",
+    "sizeArea": "Single-Sided",
+    "minQuantity": 100,
+    "maxQuantity": 499,
+    "unitPrice": 18000,
+    "targetMarginPercent": 40
+  },
+  {
+    "id": "rule-flyers-a5-single-500",
+    "service": "srv-a5-flyers",
+    "pricingEngine": "matrix",
+    "sizeArea": "Single-Sided",
+    "minQuantity": 500,
+    "maxQuantity": null,
+    "unitPrice": 32000,
+    "targetMarginPercent": 40
+  },
+  {
+    "id": "rule-business-cards-100",
+    "service": "srv-business-cards",
+    "pricingEngine": "matrix",
+    "sizeArea": "Double-Sided",
+    "minQuantity": 1,
+    "maxQuantity": null,
+    "unitPrice": 12000,
+    "targetMarginPercent": 45
+  },
+  {
+    "id": "rule-photo-frame-linear",
+    "service": "srv-photo-frame",
+    "pricingEngine": "perimeter",
+    "sizeArea": "Perimeter (Wood Frame)",
+    "ratePerLinearUnit": 150,
+    "targetMarginPercent": 45
+  },
+  {
+    "id": "rule-mug-sublimation",
+    "service": "srv-custom-mug",
+    "pricingEngine": "matrix",
+    "sizeArea": "Full-Wrap",
+    "minQuantity": 1,
+    "maxQuantity": 50,
+    "unitPrice": 1500,
+    "targetMarginPercent": 40
+  },
+  {
+    "id": "rule-mug-sublimation-bulk",
+    "service": "srv-custom-mug",
+    "pricingEngine": "matrix",
+    "sizeArea": "Full-Wrap",
+    "minQuantity": 51,
+    "maxQuantity": null,
+    "unitPrice": 1000,
+    "targetMarginPercent": 40
+  }
+]

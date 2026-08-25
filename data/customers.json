@@ -1,0 +1,35 @@
+[
+  {
+    "id": "cust-amaka-eze",
+    "name": "Amaka Eze",
+    "phone": "+2348031234567",
+    "email": "amaka@innovateafrica.io",
+    "company": "Innovate Africa Ltd",
+    "telegramHandle": "@amaka_innovate",
+    "totalSpent": 350000,
+    "outstandingDebt": 0,
+    "notes": "Frequent corporate client. Prefers premium matte finishing."
+  },
+  {
+    "id": "cust-babatunde-lawal",
+    "name": "Babatunde Lawal",
+    "phone": "+2348029876543",
+    "email": "tunde@brandpulse.ng",
+    "company": "BrandPulse Media",
+    "telegramHandle": "@tundepulse",
+    "totalSpent": 780000,
+    "outstandingDebt": 120000,
+    "notes": "Agency partner. Regularly orders bulk flex banners and merch."
+  },
+  {
+    "id": "cust-chioma-okonkwo",
+    "name": "Chioma Okonkwo",
+    "phone": "+2348145551212",
+    "email": "chioma@glowevents.ng",
+    "company": "Glow Event Planners",
+    "telegramHandle": "@glowevents_chi",
+    "totalSpent": 495000,
+    "outstandingDebt": 0,
+    "notes": "Wedding and event planner. Orders roll-up banners, jotters, and souvenirs."
+  }
+]

@@ -1,0 +1,381 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PrintOS Database Seed Data",
+  "description": "Consolidated seed dataset for Materials, Services, and Pricing Rules based on Nigerian print benchmarks",
+  "materials": [
+    {
+      "id": "mat-flex-440",
+      "name": "Flex Banner Roll (440gsm)",
+      "category": "largeFormat",
+      "unitCost": 450,
+      "unit": "sqft",
+      "notes": "Standard outdoor solvent banner material"
+    },
+    {
+      "id": "mat-sav-gloss",
+      "name": "SAV Gloss Vinyl Sticker",
+      "category": "largeFormat",
+      "unitCost": 350,
+      "unit": "sqft",
+      "notes": "Self-adhesive vinyl for decals, window & vehicle branding"
+    },
+    {
+      "id": "mat-art-card-250",
+      "name": "250gsm Art Card",
+      "category": "stationery",
+      "unitCost": 80,
+      "unit": "sheet",
+      "notes": "Standard stock for business cards, flyers, and jotter covers"
+    },
+    {
+      "id": "mat-art-paper-150",
+      "name": "150gsm Gloss Art Paper",
+      "category": "stationery",
+      "unitCost": 45,
+      "unit": "sheet",
+      "notes": "Standard stock for promotional flyers and brochure inners"
+    },
+    {
+      "id": "mat-blank-tshirt-cotton",
+      "name": "Premium Cotton Round-Neck T-Shirt (Blank)",
+      "category": "apparel",
+      "unitCost": 3500,
+      "unit": "piece",
+      "notes": "100% combed cotton 180gsm blank garment"
+    },
+    {
+      "id": "mat-blank-polo",
+      "name": "Pique Cotton Polo Shirt (Blank)",
+      "category": "apparel",
+      "unitCost": 5500,
+      "unit": "piece",
+      "notes": "Heavyweight corporate pique cotton blank polo"
+    },
+    {
+      "id": "mat-rollup-stand-3x7",
+      "name": "Roll-up Banner Aluminum Stand Mechanism (3x7 ft)",
+      "category": "largeFormat",
+      "unitCost": 16000,
+      "unit": "piece",
+      "notes": "Standard aluminum retractable roll-up base + bag"
+    },
+    {
+      "id": "mat-wood-molding-std",
+      "name": "Wood Frame Molding (Standard Black/White/Gold)",
+      "category": "framing",
+      "unitCost": 60,
+      "unit": "inch",
+      "notes": "Raw framing molding per linear inch"
+    },
+    {
+      "id": "mat-blank-mug-ceramic",
+      "name": "11oz White Ceramic Mug (Sublimation Blank)",
+      "category": "souvenirs",
+      "unitCost": 1200,
+      "unit": "piece",
+      "notes": "Polymer coated sublimation blank mug"
+    }
+  ],
+  "services": [
+    {
+      "id": "srv-dtf-tshirt",
+      "name": "DTF Printed T-Shirt",
+      "category": "apparel",
+      "pricingEngine": "matrix",
+      "defaultMaterialId": "mat-blank-tshirt-cotton",
+      "baseBlankCost": 3500,
+      "unit": "piece",
+      "displayTitle": "Premium Full-Color Print T-Shirt",
+      "bestFor": "Vibrant multi-color graphics, photographs, complex gradients",
+      "imageUrl": "/images/services/dtf-tshirt.jpg",
+      "isActive": true
+    },
+    {
+      "id": "srv-screen-tshirt",
+      "name": "Screen Printed T-Shirt",
+      "category": "apparel",
+      "pricingEngine": "matrix",
+      "defaultMaterialId": "mat-blank-tshirt-cotton",
+      "baseBlankCost": 3500,
+      "unit": "piece",
+      "displayTitle": "Standard Solid Screen Print T-Shirt",
+      "bestFor": "Simple 1-3 color logos, text, bulk events",
+      "imageUrl": "/images/categories/clothing.png",
+      "isActive": true
+    },
+    {
+      "id": "srv-embroidery-polo",
+      "name": "Embroidered Corporate Polo",
+      "category": "apparel",
+      "pricingEngine": "matrix",
+      "defaultMaterialId": "mat-blank-polo",
+      "baseBlankCost": 5500,
+      "unit": "piece",
+      "displayTitle": "Premium Stitched Embroidery Polo",
+      "bestFor": "Corporate staff uniforms, executive polo shirts",
+      "imageUrl": "/images/categories/workwear.png",
+      "isActive": true
+    },
+    {
+      "id": "srv-flex-banner",
+      "name": "Flex Banner (Outdoor)",
+      "category": "largeFormat",
+      "pricingEngine": "area",
+      "defaultMaterialId": "mat-flex-440",
+      "baseBlankCost": 0,
+      "unit": "sqft",
+      "displayTitle": "Heavy-Duty Outdoor Flex Banner",
+      "bestFor": "Outdoor event backdrops, road signs, church & party banners",
+      "imageUrl": "/images/categories/banners.png",
+      "isActive": true
+    },
+    {
+      "id": "srv-rollup-banner",
+      "name": "Roll-up Banner (3x7 ft)",
+      "category": "largeFormat",
+      "pricingEngine": "area",
+      "defaultMaterialId": "mat-flex-440",
+      "baseBlankCost": 18000,
+      "unit": "sqft",
+      "displayTitle": "Retractable Luxury Roll-Up Banner",
+      "bestFor": "Conferences, trade shows, retail showroom displays",
+      "imageUrl": "/images/services/rollup-banner.jpg",
+      "isActive": true
+    },
+    {
+      "id": "srv-sav-sticker",
+      "name": "SAV Vinyl Stickers / Decals",
+      "category": "largeFormat",
+      "pricingEngine": "area",
+      "defaultMaterialId": "mat-sav-gloss",
+      "baseBlankCost": 0,
+      "unit": "sqft",
+      "displayTitle": "Self-Adhesive Vinyl (SAV) Graphics",
+      "bestFor": "Product label sheets, window branding, vehicle wraps",
+      "imageUrl": "/images/categories/stickers.png",
+      "isActive": true
+    },
+    {
+      "id": "srv-a5-flyers",
+      "name": "A5 Promotional Flyers",
+      "category": "stationery",
+      "pricingEngine": "matrix",
+      "defaultMaterialId": "mat-art-paper-150",
+      "baseBlankCost": 0,
+      "unit": "pack",
+      "displayTitle": "Full Color Marketing Flyers (A5)",
+      "bestFor": "Handouts, product promos, event publicity",
+      "imageUrl": "/images/categories/marketing.png",
+      "isActive": true
+    },
+    {
+      "id": "srv-business-cards",
+      "name": "Business Cards (Standard 350gsm)",
+      "category": "stationery",
+      "pricingEngine": "matrix",
+      "defaultMaterialId": "mat-art-card-250",
+      "baseBlankCost": 0,
+      "unit": "pack",
+      "displayTitle": "Premium Corporate Business Cards (Pack of 100)",
+      "bestFor": "Professional networking, corporate identity",
+      "imageUrl": "/images/services/business-cards.jpg",
+      "isActive": true
+    },
+    {
+      "id": "srv-photo-frame",
+      "name": "Custom Photographic Framing",
+      "category": "framing",
+      "pricingEngine": "perimeter",
+      "defaultMaterialId": "mat-wood-molding-std",
+      "baseBlankCost": 3000,
+      "unit": "inch",
+      "displayTitle": "Custom Glass & Wood Photographic Frame",
+      "bestFor": "Portraits, wedding photos, art gallery canvas framing",
+      "imageUrl": "/images/services/photo-frame.jpg",
+      "isActive": true
+    },
+    {
+      "id": "srv-custom-mug",
+      "name": "Sublimation Ceramic Mug",
+      "category": "souvenirs",
+      "pricingEngine": "matrix",
+      "defaultMaterialId": "mat-blank-mug-ceramic",
+      "baseBlankCost": 1200,
+      "unit": "piece",
+      "displayTitle": "Branded Full-Color Ceramic Mug",
+      "bestFor": "Souvenirs, corporate gifts, wedding keepsakes",
+      "imageUrl": "/images/categories/drinkware.png",
+      "isActive": true
+    }
+  ],
+  "pricingRules": [
+    {
+      "id": "rule-dtf-tier1-a4",
+      "serviceId": "srv-dtf-tshirt",
+      "sizeArea": "A4",
+      "minQuantity": 1,
+      "maxQuantity": 20,
+      "unitPrice": 2500,
+      "targetMarginPercent": 40
+    },
+    {
+      "id": "rule-dtf-tier2-a4",
+      "serviceId": "srv-dtf-tshirt",
+      "sizeArea": "A4",
+      "minQuantity": 21,
+      "maxQuantity": 100,
+      "unitPrice": 2000,
+      "targetMarginPercent": 40
+    },
+    {
+      "id": "rule-dtf-tier3-a4",
+      "serviceId": "srv-dtf-tshirt",
+      "sizeArea": "A4",
+      "minQuantity": 101,
+      "maxQuantity": null,
+      "unitPrice": 1500,
+      "targetMarginPercent": 35
+    },
+    {
+      "id": "rule-dtf-tier1-a3",
+      "serviceId": "srv-dtf-tshirt",
+      "sizeArea": "A3",
+      "minQuantity": 1,
+      "maxQuantity": 20,
+      "unitPrice": 3500,
+      "targetMarginPercent": 40
+    },
+    {
+      "id": "rule-dtf-tier2-a3",
+      "serviceId": "srv-dtf-tshirt",
+      "sizeArea": "A3",
+      "minQuantity": 21,
+      "maxQuantity": 100,
+      "unitPrice": 3000,
+      "targetMarginPercent": 40
+    },
+    {
+      "id": "rule-dtf-tier3-a3",
+      "serviceId": "srv-dtf-tshirt",
+      "sizeArea": "A3",
+      "minQuantity": 101,
+      "maxQuantity": null,
+      "unitPrice": 2500,
+      "targetMarginPercent": 35
+    },
+    {
+      "id": "rule-screen-tier1",
+      "serviceId": "srv-screen-tshirt",
+      "sizeArea": "A4",
+      "minQuantity": 1,
+      "maxQuantity": 20,
+      "unitPrice": 1500,
+      "targetMarginPercent": 40
+    },
+    {
+      "id": "rule-screen-tier2",
+      "serviceId": "srv-screen-tshirt",
+      "sizeArea": "A4",
+      "minQuantity": 21,
+      "maxQuantity": 100,
+      "unitPrice": 1000,
+      "targetMarginPercent": 40
+    },
+    {
+      "id": "rule-screen-tier3",
+      "serviceId": "srv-screen-tshirt",
+      "sizeArea": "A4",
+      "minQuantity": 101,
+      "maxQuantity": null,
+      "unitPrice": 700,
+      "targetMarginPercent": 40
+    },
+    {
+      "id": "rule-embroidery-logo",
+      "serviceId": "srv-embroidery-polo",
+      "sizeArea": "Pocket",
+      "minQuantity": 1,
+      "maxQuantity": 20,
+      "unitPrice": 2000,
+      "targetMarginPercent": 45
+    },
+    {
+      "id": "rule-embroidery-logo-tier2",
+      "serviceId": "srv-embroidery-polo",
+      "sizeArea": "Pocket",
+      "minQuantity": 21,
+      "maxQuantity": null,
+      "unitPrice": 1500,
+      "targetMarginPercent": 45
+    },
+    {
+      "id": "rule-flex-banner-area",
+      "serviceId": "srv-flex-banner",
+      "ratePerUnitArea": 800,
+      "targetMarginPercent": 45
+    },
+    {
+      "id": "rule-rollup-banner-area",
+      "serviceId": "srv-rollup-banner",
+      "ratePerUnitArea": 1000,
+      "targetMarginPercent": 45
+    },
+    {
+      "id": "rule-sav-sticker-area",
+      "serviceId": "srv-sav-sticker",
+      "ratePerUnitArea": 750,
+      "targetMarginPercent": 50
+    },
+    {
+      "id": "rule-flyers-a5-single-100",
+      "serviceId": "srv-a5-flyers",
+      "sizeArea": "Single-Sided",
+      "minQuantity": 100,
+      "maxQuantity": 499,
+      "unitPrice": 18000,
+      "targetMarginPercent": 40
+    },
+    {
+      "id": "rule-flyers-a5-single-500",
+      "serviceId": "srv-a5-flyers",
+      "sizeArea": "Single-Sided",
+      "minQuantity": 500,
+      "maxQuantity": null,
+      "unitPrice": 32000,
+      "targetMarginPercent": 40
+    },
+    {
+      "id": "rule-business-cards-100",
+      "serviceId": "srv-business-cards",
+      "sizeArea": "Double-Sided",
+      "minQuantity": 1,
+      "maxQuantity": null,
+      "unitPrice": 12000,
+      "targetMarginPercent": 45
+    },
+    {
+      "id": "rule-photo-frame-linear",
+      "serviceId": "srv-photo-frame",
+      "ratePerLinearUnit": 150,
+      "targetMarginPercent": 45
+    },
+    {
+      "id": "rule-mug-sublimation",
+      "serviceId": "srv-custom-mug",
+      "sizeArea": "Full-Wrap",
+      "minQuantity": 1,
+      "maxQuantity": 50,
+      "unitPrice": 1500,
+      "targetMarginPercent": 40
+    },
+    {
+      "id": "rule-mug-sublimation-bulk",
+      "serviceId": "srv-custom-mug",
+      "sizeArea": "Full-Wrap",
+      "minQuantity": 51,
+      "maxQuantity": null,
+      "unitPrice": 1000,
+      "targetMarginPercent": 40
+    }
+  ]
+}

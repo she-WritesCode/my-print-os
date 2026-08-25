@@ -1,0 +1,74 @@
+[
+  {
+    "id": "mat-flex-440",
+    "name": "Flex Banner Roll (440gsm)",
+    "category": "largeFormat",
+    "unitCost": 450,
+    "unit": "sqft",
+    "notes": "Standard outdoor solvent banner material"
+  },
+  {
+    "id": "mat-sav-gloss",
+    "name": "SAV Gloss Vinyl Sticker",
+    "category": "largeFormat",
+    "unitCost": 350,
+    "unit": "sqft",
+    "notes": "Self-adhesive vinyl for decals, window & vehicle branding"
+  },
+  {
+    "id": "mat-art-card-250",
+    "name": "250gsm Art Card",
+    "category": "stationery",
+    "unitCost": 80,
+    "unit": "sheet",
+    "notes": "Standard stock for business cards, flyers, and jotter covers"
+  },
+  {
+    "id": "mat-art-paper-150",
+    "name": "150gsm Gloss Art Paper",
+    "category": "stationery",
+    "unitCost": 45,
+    "unit": "sheet",
+    "notes": "Standard stock for promotional flyers and brochure inners"
+  },
+  {
+    "id": "mat-blank-tshirt-cotton",
+    "name": "Premium Cotton Round-Neck T-Shirt (Blank)",
+    "category": "apparel",
+    "unitCost": 3500,
+    "unit": "piece",
+    "notes": "100% combed cotton 180gsm blank garment"
+  },
+  {
+    "id": "mat-blank-polo",
+    "name": "Pique Cotton Polo Shirt (Blank)",
+    "category": "apparel",
+    "unitCost": 5500,
+    "unit": "piece",
+    "notes": "Heavyweight corporate pique cotton blank polo"
+  },
+  {
+    "id": "mat-rollup-stand-3x7",
+    "name": "Roll-up Banner Aluminum Stand Mechanism (3x7 ft)",
+    "category": "largeFormat",
+    "unitCost": 16000,
+    "unit": "piece",
+    "notes": "Standard aluminum retractable roll-up base + bag"
+  },
+  {
+    "id": "mat-wood-molding-std",
+    "name": "Wood Frame Molding (Standard Black/White/Gold)",
+    "category": "framing",
+    "unitCost": 60,
+    "unit": "inch",
+    "notes": "Raw framing molding per linear inch"
+  },
+  {
+    "id": "mat-blank-mug-ceramic",
+    "name": "11oz White Ceramic Mug (Sublimation Blank)",
+    "category": "souvenirs",
+    "unitCost": 1200,
+    "unit": "piece",
+    "notes": "Polymer coated sublimation blank mug"
+  }
+]

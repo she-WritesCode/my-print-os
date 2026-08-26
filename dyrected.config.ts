@@ -19,9 +19,11 @@ export default defineConfig({
   admin: {
     meta: { titleSuffix: " | PrintOS" },
     branding: {
-      primaryColor: "#f59e0b",
-      accentColor: "#3b82f6",
+      // primaryColor: "#A4193D",
+      // accentColor: "#FFDFB9",
       logoText: "PrintOS",
+      fontSans: '"Plus Jakarta Sans", sans-serif',
+      fontSerif: '"Fraunces", serif',
     },
   },
   accessPolicies: {

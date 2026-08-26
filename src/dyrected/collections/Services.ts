@@ -1,11 +1,19 @@
 import {
   defineBooleanField,
   defineCollection,
+  defineJoinField,
   defineNumberField,
-  defineRelationshipField,
   defineSelectField,
   defineTextField,
 } from "@dyrected/core";
+
+import type { Services as ServiceDoc, Pricing_rules as PricingRuleDoc } from "@/dyrected-types";
+
+export interface ServiceWithCalculatedPrice extends ServiceDoc {
+  startingPrice?: string;
+  unitsPerPack?: number;
+  customUnitLabel?: string;
+}
 
 export const Services = defineCollection({
   slug: "services",
@@ -17,7 +25,22 @@ export const Services = defineCollection({
     useAsTitle: "name",
     icon: "Layers",
     group: "Catalog & Pricing Engine",
-    defaultColumns: ["name", "category", "pricingEngine", "baseBlankCost", "isActive"],
+    defaultColumns: [
+      "name",
+      "category",
+      "pricingEngine",
+      "defaultMaterial",
+      "baseBlankCost",
+      "unit",
+      "unitsPerPack",
+      "isActive",
+    ],
+  },
+  access: {
+    read: { policy: "isPublic" },
+    create: { policy: "isAdminOrOwner" },
+    update: { policy: "isAdminOrOwner" },
+    delete: { policy: "isAdminOrOwner" },
   },
   fields: [
     defineTextField({
@@ -27,60 +50,67 @@ export const Services = defineCollection({
     }),
     defineTextField({
       name: "displayTitle",
-      label: "Customer Showcase Title",
+      label: "Customer-Facing Title",
       required: false,
     }),
     defineSelectField({
       name: "category",
-      label: "Service Category",
-      options: [
-        { label: "Large Format & Banners", value: "largeFormat" },
-        { label: "Apparel & Merch", value: "apparel" },
-        { label: "Stationery & Marketing", value: "stationery" },
-        { label: "Photo Framing & Canvas", value: "framing" },
-        { label: "Souvenirs & Hard Goods", value: "souvenirs" },
-      ],
+      label: "Category",
       required: true,
+      options: [
+        { label: "T-Shirts & Merch", value: "apparel" },
+        { label: "Banners & Signs", value: "largeFormat" },
+        { label: "Flyers & Cards", value: "stationery" },
+        { label: "Frames & Canvas", value: "framing" },
+        { label: "Mugs & Souvenirs", value: "souvenirs" },
+      ],
+      defaultValue: "apparel",
     }),
     defineSelectField({
       name: "pricingEngine",
-      label: "Pricing Algorithm Engine",
+      label: "Pricing Engine",
+      required: true,
       options: [
-        { label: "Matrix Engine (Volume Tiered)", value: "matrix" },
-        { label: "Area Engine (2D Surface)", value: "area" },
-        { label: "Perimeter Engine (1D Linear)", value: "perimeter" },
+        { label: "Matrix (Qty Tiers + Size / Color)", value: "matrix" },
+        { label: "Area (Sq. Ft. / Sq. Meters)", value: "area" },
+        { label: "Perimeter (Linear Inches / Moulding)", value: "perimeter" },
         { label: "Flat Rate", value: "flatRate" },
       ],
-      required: true,
       defaultValue: "matrix",
     }),
-    defineRelationshipField({
+    defineTextField({
       name: "defaultMaterial",
-      label: "Default Material Benchmark",
-      relationTo: "materials",
+      label: "Primary Material Reference",
       required: false,
     }),
     defineNumberField({
       name: "baseBlankCost",
-      label: "Base Hardware / Blank Cost (₦)",
+      label: "Base Blank Item Cost (₦)",
       required: false,
       defaultValue: 0,
-      admin: {
-        format: { type: "currency", currency: "NGN", locale: "en-NG" },
-      },
     }),
     defineSelectField({
       name: "unit",
-      label: "Unit of Measurement",
+      label: "Pricing Unit",
       options: [
         { label: "Piece", value: "piece" },
-        { label: "Square Feet (sqft)", value: "sqft" },
-        { label: "Square Meters (sqm)", value: "sqm" },
-        { label: "Linear Inch (in)", value: "inch" },
+        { label: "Sq. Ft.", value: "sqft" },
         { label: "Pack", value: "pack" },
+        { label: "Linear Inch", value: "inch" },
+        { label: "Unit", value: "unit" },
       ],
       defaultValue: "piece",
       required: true,
+    }),
+    defineNumberField({
+      name: "unitsPerPack",
+      label: "Units Per Pack (e.g. 100, 500, 1000 for flyers/cards)",
+      required: false,
+    }),
+    defineTextField({
+      name: "customUnitLabel",
+      label: "Custom Price Suffix (e.g. 'pack of 500', 'A4 sheet', 'stand')",
+      required: false,
     }),
     defineTextField({
       name: "bestFor",
@@ -104,5 +134,66 @@ export const Services = defineCollection({
         },
       },
     }),
+    defineJoinField({
+      name: "pricingRules",
+      label: "Pricing Rules",
+      collection: "pricing_rules",
+      on: "service",
+    }),
   ],
+  hooks: {
+    afterRead: [
+      async ({ doc, db }) => {
+        try {
+          const service = doc as ServiceWithCalculatedPrice;
+          const serviceId = service.id;
+          if (!serviceId) return doc;
+
+          const res = await db.find({
+            collection: "pricing_rules",
+            where: { service: { equals: serviceId } },
+          });
+
+          const rules = (res?.docs as PricingRuleDoc[]) || [];
+          if (rules.length > 0) {
+            const engine = service.pricingEngine;
+            const unitSuffix =
+              service.customUnitLabel ||
+              (service.unit === "pack" && service.unitsPerPack ? `pack of ${service.unitsPerPack}` : service.unit || "piece");
+            const baseBlank = service.baseBlankCost || 0;
+
+            if (engine === "matrix") {
+              const prices = rules
+                .map((r) => (r.unitPrice || 0) + baseBlank)
+                .filter((p) => p > 0);
+              const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+              if (minPrice > 0) {
+                service.startingPrice = `Starts at ₦${minPrice.toLocaleString()} / ${unitSuffix}`;
+              }
+            } else if (engine === "area") {
+              const areaRule = rules.find((r) => (r.ratePerUnitArea ?? 0) > 0) || rules[0];
+              if (areaRule?.ratePerUnitArea) {
+                service.startingPrice = `Starts at ₦${areaRule.ratePerUnitArea.toLocaleString()} / sqft`;
+              } else if (areaRule?.unitPrice) {
+                service.startingPrice = `Starts at ₦${areaRule.unitPrice.toLocaleString()} / ${unitSuffix}`;
+              }
+            } else if (engine === "perimeter") {
+              const perimRule = rules[0];
+              const price = perimRule?.unitPrice || 15000;
+              service.startingPrice = `Starts at ₦${price.toLocaleString()} / ${unitSuffix === "piece" ? "frame" : unitSuffix}`;
+            } else if (engine === "flatRate") {
+              const flatRule = rules.find((r) => (r.unitPrice ?? 0) > 0) || rules[0];
+              const price = (flatRule?.unitPrice || 0) + baseBlank;
+              if (price > 0) {
+                service.startingPrice = `Starts at ₦${price.toLocaleString()} / ${unitSuffix}`;
+              }
+            }
+          }
+        } catch {
+          // Gracefully fallback
+        }
+        return doc;
+      },
+    ],
+  },
 });

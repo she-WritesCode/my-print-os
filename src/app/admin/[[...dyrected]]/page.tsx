@@ -10,11 +10,11 @@ const DyrectedAdmin = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex min-h-screen w-full items-center justify-center bg-[#0B0E14] text-white">
+      <div className="flex min-h-screen w-full items-center justify-center bg-[#FAF7F2] dark:bg-[#120A0D] text-[#181113] dark:text-[#FBF6F0]">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#F59E0B] border-t-transparent" />
-          <p className="text-sm font-medium tracking-wide text-amber-200/80">
-            Loading Dyrected Admin Panel...
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#A4193D] border-t-transparent" />
+          <p className="text-sm font-medium tracking-wide text-[#A4193D] dark:text-[#FFDFB9]">
+            Loading PrintOS Admin Panel...
           </p>
         </div>
       </div>
@@ -24,7 +24,7 @@ const DyrectedAdmin = dynamic(
 
 export default function AdminPage() {
   return (
-    <div id="dyrected-admin-wrapper" className="min-h-screen w-full bg-[#0B0E14]">
+    <div id="dyrected-admin-wrapper" className="min-h-screen w-full bg-[#FAF7F2] dark:bg-[#120A0D]">
       <DyrectedAdmin baseUrl="/api/dyrected" />
     </div>
   );

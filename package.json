@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "npx tsx scripts/seed-db.ts"
+    "seed": "npx tsx scripts/seed-db.ts",
+    "generate:types": "dyrected generate:types"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

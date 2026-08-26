@@ -79,6 +79,21 @@ export const PricingRules = defineCollection({
         },
       ],
     }),
+    defineView({
+      slug: "flat-rate",
+      label: "Flat Rate",
+      icon: "Frame",
+      layout: "spreadsheet",
+      groupBy: "service",
+      filter: { pricingEngine: { equals: "flatRate" } },
+      sort: { field: "service", direction: "asc" },
+      columns: ["service", "unitPrice", "targetMarginPercent"],
+      metrics: [
+        {
+          label: `"Perimeter Engine works by calculating the total cost of materials based on the perimeter of the product. It then applies a markup to the total cost to determine the final price.\nThe formula is: Total Cost = Perimeter × Rate per Linear Unit\nThe final price is then calculated as: Final Price = Total Cost × (1 + Target Margin Percentage)"`,
+        },
+      ],
+    }),
   ],
   fields: [
     defineRelationshipField({

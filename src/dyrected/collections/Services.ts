@@ -3,11 +3,13 @@ import {
   defineCollection,
   defineJoinField,
   defineNumberField,
+  defineRelationshipField,
   defineSelectField,
   defineTextField,
 } from "@dyrected/core";
 
 import type { Services as ServiceDoc, Pricing_rules as PricingRuleDoc } from "@/dyrected-types";
+import { SERVICE_ENGINE_OPTIONS } from "../constants";
 
 export interface ServiceWithCalculatedPrice extends ServiceDoc {
   startingPrice?: string;
@@ -70,18 +72,14 @@ export const Services = defineCollection({
       name: "pricingEngine",
       label: "Pricing Engine",
       required: true,
-      options: [
-        { label: "Matrix (Qty Tiers + Size / Color)", value: "matrix" },
-        { label: "Area (Sq. Ft. / Sq. Meters)", value: "area" },
-        { label: "Perimeter (Linear Inches / Moulding)", value: "perimeter" },
-        { label: "Flat Rate", value: "flatRate" },
-      ],
+      options: SERVICE_ENGINE_OPTIONS,
       defaultValue: "matrix",
     }),
-    defineTextField({
+    defineRelationshipField({
       name: "defaultMaterial",
-      label: "Primary Material Reference",
+      label: "Primary Material",
       required: false,
+      relationTo: "materials",
     }),
     defineNumberField({
       name: "baseBlankCost",
@@ -152,6 +150,7 @@ export const Services = defineCollection({
           const res = await db.find({
             collection: "pricing_rules",
             where: { service: { equals: serviceId } },
+            limit: 100,
           });
 
           const rules = (res?.docs as PricingRuleDoc[]) || [];
@@ -159,13 +158,13 @@ export const Services = defineCollection({
             const engine = service.pricingEngine;
             const unitSuffix =
               service.customUnitLabel ||
-              (service.unit === "pack" && service.unitsPerPack ? `pack of ${service.unitsPerPack}` : service.unit || "piece");
+              (service.unit === "pack" && service.unitsPerPack
+                ? `pack of ${service.unitsPerPack}`
+                : service.unit || "piece");
             const baseBlank = service.baseBlankCost || 0;
 
             if (engine === "matrix") {
-              const prices = rules
-                .map((r) => (r.unitPrice || 0) + baseBlank)
-                .filter((p) => p > 0);
+              const prices = rules.map((r) => (r.unitPrice || 0) + baseBlank).filter((p) => p > 0);
               const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
               if (minPrice > 0) {
                 service.startingPrice = `Starts at ₦${minPrice.toLocaleString()} / ${unitSuffix}`;

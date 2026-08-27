@@ -145,7 +145,7 @@ export const PRINT_SERVICES: PrintService[] = [
     name: "Custom Branded Coffee Mug",
     category: "souvenirs",
     categoryLabel: "Mugs & Souvenirs",
-    pricingEngine: "matrix",
+    pricingEngine: "flatRate",
     displayTitle: "Glossy Ceramic Branded Mug",
     bestFor: "Corporate gift boxes, birthday souvenirs, wedding favors",
     startingPrice: "₦3,200 / unit",

@@ -6,6 +6,7 @@ import {
   defineTextField,
   defineView,
 } from "@dyrected/core";
+import { PRICING_RULE_ENGINE_OPTIONS } from "../constants";
 
 export const PricingRules = defineCollection({
   slug: "pricing_rules",
@@ -82,7 +83,7 @@ export const PricingRules = defineCollection({
     defineView({
       slug: "flat-rate",
       label: "Flat Rate",
-      icon: "Frame",
+      icon: "Tag",
       layout: "spreadsheet",
       groupBy: "service",
       filter: { pricingEngine: { equals: "flatRate" } },
@@ -90,7 +91,7 @@ export const PricingRules = defineCollection({
       columns: ["service", "unitPrice", "targetMarginPercent"],
       metrics: [
         {
-          label: `"Perimeter Engine works by calculating the total cost of materials based on the perimeter of the product. It then applies a markup to the total cost to determine the final price.\nThe formula is: Total Cost = Perimeter × Rate per Linear Unit\nThe final price is then calculated as: Final Price = Total Cost × (1 + Target Margin Percentage)"`,
+          label: `"Flat Rate Engine sets a standardized price per unit or pack.\nThe formula is: Job Cost = (Base Blank Cost + Unit Print Cost) × Quantity\nThe final price is: Final Price = Unit Price × Quantity"`,
         },
       ],
     }),
@@ -105,12 +106,7 @@ export const PricingRules = defineCollection({
     defineSelectField({
       name: "pricingEngine",
       label: "Pricing Engine Model",
-      options: [
-        { label: "Matrix Engine (Volume Tiered: Apparel & Stationery)", value: "matrix" },
-        { label: "Area Engine (2D Surface: Banners & Stickers ₦/sqft)", value: "area" },
-        { label: "Perimeter Engine (1D Linear: Frames & Canvas ₦/inch)", value: "perimeter" },
-        { label: "Flat Rate Engine (Fixed Unit Merch)", value: "flatRate" },
-      ],
+      options: PRICING_RULE_ENGINE_OPTIONS,
       defaultValue: "matrix",
       required: true,
     }),

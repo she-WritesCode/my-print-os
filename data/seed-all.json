@@ -78,7 +78,7 @@
   ],
   "services": [
     {
-      "id": "srv-dtf-tshirt",
+      "id": "srv-custom-tshirt",
       "name": "DTF Printed T-Shirt",
       "category": "apparel",
       "pricingEngine": "matrix",
@@ -143,7 +143,7 @@
       "isActive": true
     },
     {
-      "id": "srv-sav-sticker",
+      "id": "srv-waterproof-sticker",
       "name": "SAV Vinyl Stickers / Decals",
       "category": "largeFormat",
       "pricingEngine": "area",
@@ -156,7 +156,7 @@
       "isActive": true
     },
     {
-      "id": "srv-a5-flyers",
+      "id": "srv-flyers",
       "name": "A5 Promotional Flyers",
       "category": "stationery",
       "pricingEngine": "matrix",
@@ -198,7 +198,7 @@
       "id": "srv-custom-mug",
       "name": "Sublimation Ceramic Mug",
       "category": "souvenirs",
-      "pricingEngine": "matrix",
+      "pricingEngine": "flatRate",
       "defaultMaterialId": "mat-blank-mug-ceramic",
       "baseBlankCost": 1200,
       "unit": "piece",
@@ -211,7 +211,7 @@
   "pricingRules": [
     {
       "id": "rule-dtf-tier1-a4",
-      "serviceId": "srv-dtf-tshirt",
+      "serviceId": "srv-custom-tshirt",
       "sizeArea": "A4",
       "minQuantity": 1,
       "maxQuantity": 20,
@@ -220,7 +220,7 @@
     },
     {
       "id": "rule-dtf-tier2-a4",
-      "serviceId": "srv-dtf-tshirt",
+      "serviceId": "srv-custom-tshirt",
       "sizeArea": "A4",
       "minQuantity": 21,
       "maxQuantity": 100,
@@ -229,7 +229,7 @@
     },
     {
       "id": "rule-dtf-tier3-a4",
-      "serviceId": "srv-dtf-tshirt",
+      "serviceId": "srv-custom-tshirt",
       "sizeArea": "A4",
       "minQuantity": 101,
       "maxQuantity": null,
@@ -238,7 +238,7 @@
     },
     {
       "id": "rule-dtf-tier1-a3",
-      "serviceId": "srv-dtf-tshirt",
+      "serviceId": "srv-custom-tshirt",
       "sizeArea": "A3",
       "minQuantity": 1,
       "maxQuantity": 20,
@@ -247,7 +247,7 @@
     },
     {
       "id": "rule-dtf-tier2-a3",
-      "serviceId": "srv-dtf-tshirt",
+      "serviceId": "srv-custom-tshirt",
       "sizeArea": "A3",
       "minQuantity": 21,
       "maxQuantity": 100,
@@ -256,7 +256,7 @@
     },
     {
       "id": "rule-dtf-tier3-a3",
-      "serviceId": "srv-dtf-tshirt",
+      "serviceId": "srv-custom-tshirt",
       "sizeArea": "A3",
       "minQuantity": 101,
       "maxQuantity": null,
@@ -322,13 +322,13 @@
     },
     {
       "id": "rule-sav-sticker-area",
-      "serviceId": "srv-sav-sticker",
+      "serviceId": "srv-waterproof-sticker",
       "ratePerUnitArea": 750,
       "targetMarginPercent": 50
     },
     {
       "id": "rule-flyers-a5-single-100",
-      "serviceId": "srv-a5-flyers",
+      "serviceId": "srv-flyers",
       "sizeArea": "Single-Sided",
       "minQuantity": 100,
       "maxQuantity": 499,
@@ -337,7 +337,7 @@
     },
     {
       "id": "rule-flyers-a5-single-500",
-      "serviceId": "srv-a5-flyers",
+      "serviceId": "srv-flyers",
       "sizeArea": "Single-Sided",
       "minQuantity": 500,
       "maxQuantity": null,
@@ -360,21 +360,10 @@
       "targetMarginPercent": 45
     },
     {
-      "id": "rule-mug-sublimation",
+      "id": "rule-mug-flat-rate",
       "serviceId": "srv-custom-mug",
-      "sizeArea": "Full-Wrap",
-      "minQuantity": 1,
-      "maxQuantity": 50,
-      "unitPrice": 1500,
-      "targetMarginPercent": 40
-    },
-    {
-      "id": "rule-mug-sublimation-bulk",
-      "serviceId": "srv-custom-mug",
-      "sizeArea": "Full-Wrap",
-      "minQuantity": 51,
-      "maxQuantity": null,
-      "unitPrice": 1000,
+      "sizeArea": "Standard 11oz Full-Wrap",
+      "unitPrice": 2000,
       "targetMarginPercent": 40
     }
   ]

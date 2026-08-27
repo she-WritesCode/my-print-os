@@ -120,7 +120,7 @@
     "id": "srv-custom-mug",
     "name": "Custom Branded Coffee Mug",
     "category": "souvenirs",
-    "pricingEngine": "matrix",
+    "pricingEngine": "flatRate",
     "defaultMaterial": "mat-blank-mug-ceramic",
     "baseBlankCost": 1200,
     "unit": "piece",

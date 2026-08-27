@@ -1,7 +1,7 @@
 [
   {
     "id": "rule-dtf-tier1-a4",
-    "service": "srv-dtf-tshirt",
+    "service": "srv-custom-tshirt",
     "pricingEngine": "matrix",
     "sizeArea": "A4",
     "minQuantity": 1,
@@ -11,7 +11,7 @@
   },
   {
     "id": "rule-dtf-tier2-a4",
-    "service": "srv-dtf-tshirt",
+    "service": "srv-custom-tshirt",
     "pricingEngine": "matrix",
     "sizeArea": "A4",
     "minQuantity": 21,
@@ -21,7 +21,7 @@
   },
   {
     "id": "rule-dtf-tier3-a4",
-    "service": "srv-dtf-tshirt",
+    "service": "srv-custom-tshirt",
     "pricingEngine": "matrix",
     "sizeArea": "A4",
     "minQuantity": 101,
@@ -31,7 +31,7 @@
   },
   {
     "id": "rule-dtf-tier1-a3",
-    "service": "srv-dtf-tshirt",
+    "service": "srv-custom-tshirt",
     "pricingEngine": "matrix",
     "sizeArea": "A3",
     "minQuantity": 1,
@@ -41,7 +41,7 @@
   },
   {
     "id": "rule-dtf-tier2-a3",
-    "service": "srv-dtf-tshirt",
+    "service": "srv-custom-tshirt",
     "pricingEngine": "matrix",
     "sizeArea": "A3",
     "minQuantity": 21,
@@ -51,7 +51,7 @@
   },
   {
     "id": "rule-dtf-tier3-a3",
-    "service": "srv-dtf-tshirt",
+    "service": "srv-custom-tshirt",
     "pricingEngine": "matrix",
     "sizeArea": "A3",
     "minQuantity": 101,
@@ -127,7 +127,7 @@
   },
   {
     "id": "rule-sav-sticker-area",
-    "service": "srv-sav-sticker",
+    "service": "srv-waterproof-sticker",
     "pricingEngine": "area",
     "sizeArea": "Custom Sqft",
     "ratePerUnitArea": 750,
@@ -135,7 +135,7 @@
   },
   {
     "id": "rule-flyers-a5-single-100",
-    "service": "srv-a5-flyers",
+    "service": "srv-flyers",
     "pricingEngine": "matrix",
     "sizeArea": "Single-Sided",
     "minQuantity": 100,
@@ -145,7 +145,7 @@
   },
   {
     "id": "rule-flyers-a5-single-500",
-    "service": "srv-a5-flyers",
+    "service": "srv-flyers",
     "pricingEngine": "matrix",
     "sizeArea": "Single-Sided",
     "minQuantity": 500,
@@ -172,23 +172,11 @@
     "targetMarginPercent": 45
   },
   {
-    "id": "rule-mug-sublimation",
+    "id": "rule-mug-flat-rate",
     "service": "srv-custom-mug",
-    "pricingEngine": "matrix",
-    "sizeArea": "Full-Wrap",
-    "minQuantity": 1,
-    "maxQuantity": 50,
-    "unitPrice": 1500,
-    "targetMarginPercent": 40
-  },
-  {
-    "id": "rule-mug-sublimation-bulk",
-    "service": "srv-custom-mug",
-    "pricingEngine": "matrix",
-    "sizeArea": "Full-Wrap",
-    "minQuantity": 51,
-    "maxQuantity": null,
-    "unitPrice": 1000,
+    "pricingEngine": "flatRate",
+    "sizeArea": "Standard 11oz Full-Wrap",
+    "unitPrice": 2000,
     "targetMarginPercent": 40
   }
 ]

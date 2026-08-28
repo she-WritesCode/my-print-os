@@ -11,6 +11,7 @@ interface TurnRequest {
   prefillServiceId?: string;
   customerName?: string;
   customerContact?: string;
+  role?: "customer" | "admin" | "owner";
 }
 
 /**
@@ -61,8 +62,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body: TurnRequest = await req.json();
-    const { messages = [], prefillServiceId } = body;
+    const { messages = [] } = body;
     const threadId = body.threadId || body.conversationId || `thread-${Date.now()}`;
+    const userRole = body.role || req.headers.get("x-user-role") || "customer";
 
     if (!messages.length) {
       return NextResponse.json({ error: "No messages provided" }, { status: 400 });
@@ -79,15 +81,16 @@ export async function POST(req: NextRequest) {
     const nameMatch = allUserText.match(
       /(?:my name is|i am|i'm|call me|name:?)\s+([A-Za-z]+(?:\s+[A-Za-z]+)?)/i
     );
-    const detectedName = nameMatch ? nameMatch[1].trim() : body.customerName || "Customer";
+    const detectedName = nameMatch ? nameMatch[1].trim() : body.customerName || (userRole === "admin" ? "Shop Owner" : "Customer");
 
-    // 2. Initialize Dyrected AIAgent
+    // 2. Initialize Dyrected AIAgent with role
     const agent = new AIAgent({
       db: config.db as DatabaseAdapter,
       config: config as any,
       projectId: "default",
       userId: threadId,
       userName: detectedName,
+      userRole: userRole,
     });
 
     // 3. Ensure Dyrected Thread exists

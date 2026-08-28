@@ -2,9 +2,7 @@ import postgres from "postgres";
 import { PRINT_SERVICES, PrintService } from "./services";
 import { Pricing_rules, Services } from "@/dyrected-types";
 
-const DATABASE_URL =
-  process.env.DATABASE_URL ||
-  "postgresql://postgres:REDACTED_DB_PASSWORD@185.190.143.94:5432/myprintos";
+const DATABASE_URL = process.env.DATABASE_URL || "";
 
 // Map category values to clean display labels
 export const CATEGORY_LABELS: Record<string, string> = {

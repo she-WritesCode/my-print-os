@@ -140,7 +140,7 @@ export interface Services {
   displayTitle?: string;
   category: "apparel" | "largeFormat" | "stationery" | "framing" | "souvenirs";
   pricingEngine: "matrix" | "area" | "perimeter" | "flatRate";
-  defaultMaterial?: string;
+  defaultMaterial?: Materials | string;
   baseBlankCost?: number;
   unit: "piece" | "sqft" | "pack" | "inch" | "unit";
   unitsPerPack?: number;

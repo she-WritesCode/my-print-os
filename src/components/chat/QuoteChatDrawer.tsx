@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   Send,
   Sparkles,
@@ -12,7 +13,6 @@ import {
   ChevronDown,
   ChevronUp,
   Square,
-  Calculator,
 } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -76,6 +76,25 @@ function TypingDots({ label = "Consulting workshop pricing rules..." }: { label?
 }
 
 /**
+ * Fixes LLM compressed single-line tables (e.g. `||---|---||` -> `|\n|`)
+ * and ensures standard GFM table format with clean linebreaks.
+ */
+function formatMarkdownForRendering(text: string): string {
+  if (!text) return "";
+
+  let formatted = text;
+
+  // 1. Convert glued table cells/rows like `||---|---||` into `|\n|---|---|\n|`
+  formatted = formatted.replace(/\|\|\s*\|/g, "|\n|");
+  formatted = formatted.replace(/\|\|/g, "|\n|");
+
+  // 2. Ensure table headers and separators are properly separated with newlines
+  formatted = formatted.replace(/(\|[-:\s]+\|)\s*\|/g, "$1\n|");
+
+  return formatted;
+}
+
+/**
  * Extracts DeepSeek chain-of-thought `<think>` tags and cleans response text
  */
 function parseReasoning(rawText: string) {
@@ -92,7 +111,10 @@ function parseReasoning(rawText: string) {
     finalResponse = rawText.replace(/<(?:think|thought)>[\s\S]*?(?:<\/(?:think|thought)>|$)/gi, "").trim();
   }
 
-  return { thinking, finalResponse };
+  return {
+    thinking,
+    finalResponse: formatMarkdownForRendering(finalResponse),
+  };
 }
 
 /**
@@ -489,9 +511,10 @@ export function QuoteChatDrawer({
                     />
                   )}
 
-                  {/* Rich Markdown Formatter */}
+                  {/* Rich Markdown Formatter with Table Support */}
                   <div className="prose prose-stone dark:prose-invert max-w-none text-sm leading-relaxed break-words">
                     <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
                       components={{
                         p: ({ children }) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
                         strong: ({ children }) => (
@@ -504,6 +527,34 @@ export function QuoteChatDrawer({
                           >
                             {children}
                           </strong>
+                        ),
+                        table: ({ children }) => (
+                          <div className="my-3 overflow-x-auto rounded-xl border border-[#EADDCF] dark:border-[#331D25] shadow-xs">
+                            <table className="w-full text-xs text-left border-collapse">{children}</table>
+                          </div>
+                        ),
+                        thead: ({ children }) => (
+                          <thead className="bg-[#F4EDE4] dark:bg-[#23141B] text-[#181113] dark:text-[#FBF6F0] font-bold border-b border-[#EADDCF] dark:border-[#331D25]">
+                            {children}
+                          </thead>
+                        ),
+                        tbody: ({ children }) => (
+                          <tbody className="divide-y divide-[#EADDCF]/60 dark:divide-[#2E1C23]/60 bg-white/60 dark:bg-[#1C1116]/60">
+                            {children}
+                          </tbody>
+                        ),
+                        tr: ({ children }) => (
+                          <tr className="hover:bg-[#FFDFB9]/20 transition-colors">{children}</tr>
+                        ),
+                        th: ({ children }) => (
+                          <th className="px-3 py-2 text-xs font-semibold text-[#5C0B20] dark:text-[#FFDFB9] border-r border-[#EADDCF]/40 dark:border-[#331D25]/40 last:border-r-0">
+                            {children}
+                          </th>
+                        ),
+                        td: ({ children }) => (
+                          <td className="px-3 py-2 text-xs text-[#181113] dark:text-[#FBF6F0] border-r border-[#EADDCF]/40 dark:border-[#331D25]/40 last:border-r-0">
+                            {children}
+                          </td>
                         ),
                         ul: ({ children }) => <ul className="my-2 ml-4 list-disc space-y-1">{children}</ul>,
                         ol: ({ children }) => <ol className="my-2 ml-4 list-decimal space-y-1">{children}</ol>,

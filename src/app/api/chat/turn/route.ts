@@ -83,9 +83,11 @@ export async function POST(req: NextRequest) {
     );
     const detectedName = nameMatch ? nameMatch[1].trim() : body.customerName || (userRole === "admin" ? "Shop Owner" : "Customer");
 
+    const db = config.db as DatabaseAdapter;
+
     // 2. Initialize Dyrected AIAgent with role
     const agent = new AIAgent({
-      db: config.db as DatabaseAdapter,
+      db,
       config: config as any,
       projectId: "default",
       userId: threadId,
@@ -93,17 +95,38 @@ export async function POST(req: NextRequest) {
       userRole: userRole,
     });
 
-    // 3. Ensure Dyrected Thread exists
+    // 3. Ensure Dyrected Thread exists with the exact threadId
     try {
-      const existingThread = await agent.getThread(threadId).catch(() => null);
+      const existingThread = await db.findOne({
+        collection: "_dyrected_ai_threads",
+        id: threadId,
+      }).catch(() => null);
+
       if (!existingThread) {
-        await agent.createThread(lastUserMessage.slice(0, 40) || "Print Quote Chat");
+        await db.create({
+          collection: "_dyrected_ai_threads",
+          data: {
+            id: threadId,
+            projectId: "default",
+            userId: threadId,
+            title: lastUserMessage.slice(0, 40) || "Print Quote Chat",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        }).catch(() => null);
       }
     } catch {
       // Thread initialization fallback
     }
 
-    // 4. Check if client accepts streaming (default is stream)
+    // 4. Persist the incoming user message so conversation context is never lost
+    try {
+      await agent.persistUserMessage(threadId, lastUserMessage);
+    } catch (persistErr) {
+      console.warn("⚠️ Could not persist user message:", persistErr);
+    }
+
+    // 5. Stream AI response with full multi-turn context
     const encoder = new TextEncoder();
     const generator = agent.streamReply(threadId, lastUserMessage);
 

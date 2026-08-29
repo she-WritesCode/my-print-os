@@ -28,6 +28,9 @@ export default defineConfig({
       fontSans: '"Plus Jakarta Sans", sans-serif',
       fontSerif: '"Fraunces", serif',
     },
+    components: {
+      beforeDashboard: ["profit-guardian"],
+    },
   },
   ai: {
     provider: "openrouter",

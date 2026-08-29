@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import "@dyrected/admin/styles";
 import "../admin-branding.css";
+import { ProfitGuardianWidget } from "@/components/admin/ProfitGuardianWidget";
 
 // Dynamically import DyrectedAdmin with SSR disabled for Next.js App Router client rendering
 const DyrectedAdmin = dynamic(
@@ -25,7 +26,14 @@ const DyrectedAdmin = dynamic(
 export default function AdminPage() {
   return (
     <div id="dyrected-admin-wrapper" className="min-h-screen w-full bg-[#FAF7F2] dark:bg-[#120A0D]">
-      <DyrectedAdmin baseUrl="/api/dyrected" />
+      <DyrectedAdmin
+        baseUrl="/api/dyrected"
+        components={{
+          dashboard: {
+            "profit-guardian": ProfitGuardianWidget,
+          },
+        }}
+      />
     </div>
   );
 }

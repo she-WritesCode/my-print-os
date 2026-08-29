@@ -169,9 +169,9 @@ export function ProfitGuardianWidget() {
   );
 
   return (
-    <div className="w-full space-y-6 mb-8 p-1">
+    <div className="w-full mb-8 rounded-3xl border border-[#EADDCF] dark:border-[#2E1C23] bg-white/70 dark:bg-[#160E12]/70 p-5 sm:p-6 shadow-sm backdrop-blur-xs space-y-6">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-linear-to-r from-[#A4193D]/10 via-[#FAF7F2] to-[#FFDFB9]/20 dark:from-[#A4193D]/20 dark:via-[#160D11] dark:to-[#2A151D] border border-[#EADDCF] dark:border-[#331D25]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-linear-to-r from-[#A4193D]/10 via-[#FAF7F2] to-[#FFDFB9]/20 dark:from-[#A4193D]/20 dark:via-[#160D11] dark:to-[#2A151D] border border-[#EADDCF] dark:border-[#331D25] shadow-xs">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />

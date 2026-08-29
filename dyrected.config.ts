@@ -29,7 +29,7 @@ export default defineConfig({
       fontSerif: '"Fraunces", serif',
     },
     components: {
-      beforeDashboard: ["profit-guardian"],
+      afterDashboard: ["profit-guardian"],
     },
   },
   ai: {
@@ -168,7 +168,9 @@ Your user is a walk-in or website customer looking to print, frame, or brand ite
           orderNumber: z
             .string()
             .optional()
-            .describe("Existing Order reference number if updating an already created order in this thread (e.g. 'ORD-2026-1234')"),
+            .describe(
+              "Existing Order reference number if updating an already created order in this thread (e.g. 'ORD-2026-1234')",
+            ),
           customerName: z.string().describe("Customer's full name"),
           customerPhone: z.string().describe("Customer's WhatsApp or phone number"),
           customerEmail: z.string().optional().describe("Customer's email address if provided"),
@@ -188,9 +190,7 @@ Your user is a walk-in or website customer looking to print, frame, or brand ite
           const customerId = cleanPhone ? `cust-${cleanPhone}` : `cust-${Date.now()}`;
 
           // 1. Find or Create / Update Customer Record
-          const existingCustomer = await db
-            .findOne({ collection: "customers", id: customerId })
-            .catch(() => null);
+          const existingCustomer = await db.findOne({ collection: "customers", id: customerId }).catch(() => null);
 
           if (existingCustomer) {
             await db
@@ -242,7 +242,9 @@ Your user is a walk-in or website customer looking to print, frame, or brand ite
           if (existingOrder) {
             // Update existing order
             const orderId = existingOrder.id;
-            targetOrderNumber = (existingOrder.data?.orderNumber || existingOrder.orderNumber || targetOrderNumber) as string;
+            targetOrderNumber = (existingOrder.data?.orderNumber ||
+              existingOrder.orderNumber ||
+              targetOrderNumber) as string;
 
             await db
               .update({

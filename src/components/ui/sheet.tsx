@@ -62,7 +62,11 @@ function SheetContent({
       <SheetOverlay />
       <DialogPrimitive.Popup
         data-slot="sheet-content"
-        className={cn(sheetVariants({ side }), className)}
+        className={cn(
+          "fixed top-0 right-0 bottom-0 z-50 h-full max-h-screen",
+          sheetVariants({ side }),
+          className
+        )}
         {...props}
       >
         {children}

@@ -240,6 +240,7 @@ export function QuoteChatDrawer({
   const abortControllerRef = useRef<AbortController | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const initialPromptSentRef = useRef<string | null>(null);
 
   // Auto-scroll on new messages or streaming chunks
   useEffect(() => {
@@ -433,16 +434,27 @@ export function QuoteChatDrawer({
     }
   }, [input, isStreaming, conversationId, messages, prefillServiceId]);
 
+  const handleSendMessageRef = useRef(handleSendMessage);
+  handleSendMessageRef.current = handleSendMessage;
+
   // Initialize or resume persistent session when drawer opens
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      initialPromptSentRef.current = null;
+      return;
+    }
 
     const threadToUse = conversationId || (typeof window !== "undefined" ? sessionStorage.getItem(SESSION_THREAD_KEY) : null) || `thread-${Date.now()}`;
 
     const initChat = async () => {
-      // 1. If an initial prompt was provided (e.g. from Hero), send it directly
+      // 1. If an initial prompt was provided (e.g. from Hero), send it directly ONCE
+      if (initialPrompt && initialPromptSentRef.current !== initialPrompt) {
+        initialPromptSentRef.current = initialPrompt;
+        handleSendMessageRef.current(initialPrompt, threadToUse);
+        return;
+      }
+
       if (initialPrompt) {
-        handleSendMessage(initialPrompt, threadToUse);
         return;
       }
 
@@ -492,7 +504,7 @@ export function QuoteChatDrawer({
     };
 
     initChat();
-  }, [isOpen, prefillServiceId, initialPrompt, handleSendMessage, conversationId]);
+  }, [isOpen, prefillServiceId, initialPrompt, conversationId]);
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -500,7 +512,7 @@ export function QuoteChatDrawer({
         side="right"
         style={{ width: `${panelWidth}px`, maxWidth: "100vw" }}
         className={cn(
-          "flex flex-col p-0 gap-0 w-full sm:max-w-none bg-[#FAF7F2] dark:bg-[#120A0D] border-l border-[#EADDCF] dark:border-[#2E1C23] shadow-2xl relative",
+          "fixed top-0 right-0 bottom-0 h-full flex flex-col p-0 gap-0 w-full sm:max-w-none bg-[#FAF7F2] dark:bg-[#120A0D] border-l border-[#EADDCF] dark:border-[#2E1C23] shadow-2xl z-50",
           isResizing && "select-none transition-none"
         )}
       >

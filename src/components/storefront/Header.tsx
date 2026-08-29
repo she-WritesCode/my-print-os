@@ -44,10 +44,16 @@ export function Header({ onOpenChat }: HeaderProps) {
             70% Deposit Rule
           </Link>
           <Link
+            href="/guardian"
+            className="inline-flex items-center gap-1 text-[#A4193D] dark:text-[#FFDFB9] font-bold hover:underline transition-colors"
+          >
+            <Shield className="h-3.5 w-3.5" />
+            <span>Guardian View</span>
+          </Link>
+          <Link
             href="/admin"
             className="inline-flex items-center gap-1 hover:text-[#A4193D] dark:hover:text-[#FFDFB9] transition-colors"
           >
-            <Shield className="h-3 w-3 text-[#A4193D]" />
             <span>Admin</span>
           </Link>
         </nav>

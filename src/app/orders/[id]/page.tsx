@@ -8,14 +8,11 @@ import {
   Printer,
   Truck,
   ArrowLeft,
-  Copy,
-  ExternalLink,
   ShieldCheck,
   Phone,
   FileText,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
@@ -282,7 +279,7 @@ export default async function OrderPublicPage({ params }: { params: Promise<{ id
                           Production Notes
                         </span>
                         <p className="text-xs italic text-[#6E5F64] dark:text-[#A8949A]">
-                          "{order.notes}"
+                          &ldquo;{order.notes}&rdquo;
                         </p>
                       </div>
                     </>

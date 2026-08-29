@@ -1,0 +1,35 @@
+/* PrintOS Admin & Guardian Styling */
+
+:root {
+  --border: #eaddcf;
+  --card: #ffffff;
+  --card-foreground: #181113;
+}
+
+.dark,
+[data-theme="dark"] {
+  --border: #331d25;
+  --card: #1c1116;
+  --card-foreground: #fbf6f0;
+}
+
+.guardian-container {
+  border: 1px solid var(--border) !important;
+  border-radius: 1.5rem !important;
+}
+
+.guardian-banner {
+  border: 1px solid var(--border) !important;
+  border-radius: 1rem !important;
+}
+
+.guardian-card {
+  border: 1px solid var(--border) !important;
+  border-radius: 1rem !important;
+  background-color: var(--card) !important;
+}
+
+.guardian-subcard {
+  border: 1px solid var(--border) !important;
+  border-radius: 0.75rem !important;
+}

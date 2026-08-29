@@ -24,7 +24,7 @@ function computeStartingPrice(
 ): { price: string; turnaround: string } {
   // 1. Safe relationship ID match (handles both string ID and populated object)
   const rules = pricingRules.filter((r) => {
-    const relId = typeof r.service === "object" && r.service !== null ? (r.service as any).id : r.service;
+    const relId = typeof r.service === "object" && r.service !== null && "id" in r.service ? String(r.service.id) : r.service;
     return relId === serviceId;
   });
 
@@ -114,7 +114,7 @@ function computeStartingPrice(
  */
 export async function getDyrectedServices(): Promise<PrintService[]> {
   try {
-    const sql = postgres(DATABASE_URL, { max: 1, timeout: 4 });
+    const sql = postgres(DATABASE_URL, { max: 1, timeout: 3, connect_timeout: 3, idle_timeout: 3 });
     const [serviceRows, ruleRows] = await Promise.all([
       sql`SELECT id, data FROM collection_services ORDER BY id ASC`,
       sql`SELECT id, data FROM collection_pricing_rules`,

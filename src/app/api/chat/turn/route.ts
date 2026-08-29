@@ -35,7 +35,11 @@ export async function GET(req: NextRequest) {
       userName: "Customer",
     });
 
-    const messages = await agent.getMessages(threadId);
+    const timeoutPromise = new Promise<{ id: string; role: "assistant" | "user"; content: string; createdAt?: string }[]>((_, reject) =>
+      setTimeout(() => reject(new Error("Database lookup timed out")), 2500)
+    );
+
+    const messages = await Promise.race([agent.getMessages(threadId), timeoutPromise]);
 
     return NextResponse.json({
       threadId,
@@ -48,11 +52,11 @@ export async function GET(req: NextRequest) {
     });
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : String(err);
-    console.error("❌ Error fetching thread history:", err);
-    return NextResponse.json(
-      { error: "Failed to load thread history", details: errorMsg },
-      { status: 500 }
-    );
+    console.warn("⚠️ Could not load remote thread history (returning empty history):", errorMsg);
+    return NextResponse.json({
+      threadId: "default",
+      messages: [],
+    });
   }
 }
 

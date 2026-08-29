@@ -435,7 +435,9 @@ export function QuoteChatDrawer({
   }, [input, isStreaming, conversationId, messages, prefillServiceId]);
 
   const handleSendMessageRef = useRef(handleSendMessage);
-  handleSendMessageRef.current = handleSendMessage;
+  useEffect(() => {
+    handleSendMessageRef.current = handleSendMessage;
+  }, [handleSendMessage]);
 
   // Initialize or resume persistent session when drawer opens
   useEffect(() => {

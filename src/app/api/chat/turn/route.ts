@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
 
     const agent = new AIAgent({
       db: config.db as DatabaseAdapter,
-      config: config as any,
+      config: config as unknown as ConstructorParameters<typeof AIAgent>[0]["config"],
       projectId: "default",
       userId: threadId,
       userName: "Customer",
@@ -39,17 +39,18 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       threadId,
-      messages: (messages || []).map((m: any) => ({
+      messages: (messages || []).map((m) => ({
         id: m.id,
         role: m.role,
         content: m.content,
-        timestamp: m.createdAt || m.created_at || new Date().toISOString(),
+        timestamp: m.createdAt || new Date().toISOString(),
       })),
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : String(err);
     console.error("❌ Error fetching thread history:", err);
     return NextResponse.json(
-      { error: "Failed to load thread history", details: err?.message },
+      { error: "Failed to load thread history", details: errorMsg },
       { status: 500 }
     );
   }
@@ -86,7 +87,7 @@ export async function POST(req: NextRequest) {
     // 2. Initialize Dyrected AIAgent with user context and role
     const agent = new AIAgent({
       db: config.db as DatabaseAdapter,
-      config: config as any,
+      config: config as unknown as ConstructorParameters<typeof AIAgent>[0]["config"],
       projectId: "default",
       userId: threadId,
       userName: detectedName,
@@ -128,10 +129,11 @@ export async function POST(req: NextRequest) {
         "Cache-Control": "no-cache, no-transform",
       },
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : String(err);
     console.error("❌ /api/chat/turn error:", err);
     return NextResponse.json(
-      { error: "Internal server error during chat turn", details: err?.message },
+      { error: "Internal server error during chat turn", details: errorMsg },
       { status: 500 }
     );
   }

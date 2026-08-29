@@ -5,7 +5,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
   Send,
-  Sparkles,
   ArrowRight,
   CheckCircle2,
   RotateCcw,
@@ -452,9 +451,9 @@ export function QuoteChatDrawer({
         const res = await fetch(`/api/chat/turn?threadId=${threadToUse}`);
         if (res.ok) {
           const data = await res.json();
-          if (data.messages && data.messages.length > 0) {
+          if (Array.isArray(data.messages) && data.messages.length > 0) {
             setMessages(
-              data.messages.map((m: any) => ({
+              data.messages.map((m: { id: string; role: "assistant" | "user"; content: string; timestamp?: string }) => ({
                 id: m.id,
                 role: m.role,
                 content: m.content,
@@ -590,7 +589,7 @@ export function QuoteChatDrawer({
                   )}
 
                   {/* Rich Markdown Formatter with Table Support */}
-                  <div className="prose prose-stone dark:prose-invert max-w-none text-sm leading-relaxed break-words">
+                  <div className="prose prose-stone dark:prose-invert max-w-none text-sm leading-relaxed wrap-break-word">
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
                       components={{

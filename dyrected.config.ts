@@ -308,8 +308,9 @@ Your user is a walk-in or website customer looking to print, frame, or brand ite
           // Create new Order Record
           const randomSuffix = Math.floor(1000 + Math.random() * 9000);
           const newOrderNumber = `ORD-${new Date().getFullYear()}-${randomSuffix}`;
-          const newOrderId = `ord-${newOrderNumber.toLowerCase()}`;
-          const newJobId = `job-${newOrderNumber.toLowerCase()}`;
+          const dynamicSuffix = Math.random().toString(36).substring(2, 10);
+          const newOrderId = `ord_${dynamicSuffix}`;
+          const newJobId = `job_${dynamicSuffix}`;
 
           await db
             .create({
@@ -320,6 +321,7 @@ Your user is a walk-in or website customer looking to print, frame, or brand ite
                 customer: customerId,
                 customerName: input.customerName,
                 customerContact: input.customerPhone,
+                ...(input.customerEmail ? { customerEmail: input.customerEmail } : {}),
                 subtotal: input.totalPrice,
                 depositRequired: input.depositRequired,
                 depositPaid: 0,
@@ -351,11 +353,12 @@ Your user is a walk-in or website customer looking to print, frame, or brand ite
           return {
             success: true,
             isUpdated: false,
+            orderId: newOrderId,
             orderNumber: newOrderNumber,
             customerName: input.customerName,
             customerPhone: input.customerPhone,
             customerEmail: input.customerEmail,
-            message: `Order ${newOrderNumber} and customer profile for ${input.customerName} successfully created in workshop database.`,
+            message: `Order ${newOrderNumber} (ID: ${newOrderId}) and customer profile for ${input.customerName} successfully created in workshop database.`,
           };
         },
       },

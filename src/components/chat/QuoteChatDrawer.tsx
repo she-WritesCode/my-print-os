@@ -77,19 +77,32 @@ function TypingDots({ label = "Consulting workshop pricing rules..." }: { label?
 
 /**
  * Fixes LLM compressed single-line tables (e.g. `||---|---||` -> `|\n|`)
- * and ensures standard GFM table format with clean linebreaks.
+ * and ensures standard GFM table format with valid header cells and clean linebreaks.
  */
 function formatMarkdownForRendering(text: string): string {
   if (!text) return "";
 
   let formatted = text;
 
-  // 1. Convert glued table cells/rows like `||---|---||` into `|\n|---|---|\n|`
+  // 1. Convert empty table headers like `| | |` or `|   |   |` to `| Detail | Info |` so remark-gfm parses them
+  formatted = formatted.replace(
+    /\|[\s\t]*\|[\s\t]*\|\n\|[-:\s|]+\|/g,
+    "| Detail | Info |\n|---|---|"
+  );
+  formatted = formatted.replace(
+    /\|[\s\t]*\|[\s\t]*\|[\s\t]*\|\n\|[-:\s|]+\|/g,
+    "| Item | Detail | Info |\n|---|---|---|"
+  );
+
+  // 2. Convert glued table cells/rows like `||---|---||` into `|\n|---|---|\n|`
   formatted = formatted.replace(/\|\|\s*\|/g, "|\n|");
   formatted = formatted.replace(/\|\|/g, "|\n|");
 
-  // 2. Ensure table headers and separators are properly separated with newlines
+  // 3. Ensure table headers and separators are properly separated with newlines
   formatted = formatted.replace(/(\|[-:\s]+\|)\s*\|/g, "$1\n|");
+
+  // 4. Ensure table starts on its own line after headings
+  formatted = formatted.replace(/(#{1,6}[^\n]+)\n(\|)/g, "$1\n\n$2");
 
   return formatted;
 }

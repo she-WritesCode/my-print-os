@@ -83,11 +83,9 @@ export async function POST(req: NextRequest) {
     );
     const detectedName = nameMatch ? nameMatch[1].trim() : body.customerName || (userRole === "admin" ? "Shop Owner" : "Customer");
 
-    const db = config.db as DatabaseAdapter;
-
-    // 2. Initialize Dyrected AIAgent with role
+    // 2. Initialize Dyrected AIAgent with user context and role
     const agent = new AIAgent({
-      db,
+      db: config.db as DatabaseAdapter,
       config: config as any,
       projectId: "default",
       userId: threadId,
@@ -95,38 +93,10 @@ export async function POST(req: NextRequest) {
       userRole: userRole,
     });
 
-    // 3. Ensure Dyrected Thread exists with the exact threadId
-    try {
-      const existingThread = await db.findOne({
-        collection: "_dyrected_ai_threads",
-        id: threadId,
-      }).catch(() => null);
+    // 3. Ensure thread exists via Dyrected native getOrCreateThread
+    await agent.getOrCreateThread(threadId, lastUserMessage.slice(0, 40) || "Print Quote Chat");
 
-      if (!existingThread) {
-        await db.create({
-          collection: "_dyrected_ai_threads",
-          data: {
-            id: threadId,
-            projectId: "default",
-            userId: threadId,
-            title: lastUserMessage.slice(0, 40) || "Print Quote Chat",
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
-        }).catch(() => null);
-      }
-    } catch {
-      // Thread initialization fallback
-    }
-
-    // 4. Persist the incoming user message so conversation context is never lost
-    try {
-      await agent.persistUserMessage(threadId, lastUserMessage);
-    } catch (persistErr) {
-      console.warn("⚠️ Could not persist user message:", persistErr);
-    }
-
-    // 5. Stream AI response with full multi-turn context
+    // 4. Stream AI response (Dyrected automatically persists user & assistant turns)
     const encoder = new TextEncoder();
     const generator = agent.streamReply(threadId, lastUserMessage);
 
@@ -159,3 +129,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

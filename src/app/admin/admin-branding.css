@@ -15,21 +15,21 @@
 
 .guardian-container {
   border: 1px solid var(--border) !important;
-  border-radius: 1.5rem !important;
+  border-radius: 0.5rem !important;
 }
 
 .guardian-banner {
   border: 1px solid var(--border) !important;
-  border-radius: 1rem !important;
+  border-radius: 0.5rem !important;
 }
 
 .guardian-card {
   border: 1px solid var(--border) !important;
-  border-radius: 1rem !important;
+  border-radius: 0.5rem !important;
   background-color: var(--card) !important;
 }
 
 .guardian-subcard {
   border: 1px solid var(--border) !important;
-  border-radius: 0.75rem !important;
+  border-radius: 0.375rem !important;
 }

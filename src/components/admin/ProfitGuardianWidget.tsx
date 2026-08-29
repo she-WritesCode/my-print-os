@@ -171,7 +171,7 @@ export function ProfitGuardianWidget() {
   return (
     <div className="w-full mb-8 space-y-6">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-white dark:bg-[#160D11] border! border-border shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-lg bg-white dark:bg-[#160D11] border! border-border! shadow-xs">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
@@ -191,7 +191,7 @@ export function ProfitGuardianWidget() {
             variant="outline"
             size="sm"
             onClick={handleGenerateWeeklyReport}
-            className="bg-white dark:bg-[#1C1116] border! border-border text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
+            className="rounded-md bg-white dark:bg-[#1C1116] border! border-border! text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
           >
             <Sparkles className="h-3.5 w-3.5 text-[#A4193D]" />
             <span>Weekly AI Report</span>
@@ -202,7 +202,7 @@ export function ProfitGuardianWidget() {
             size="sm"
             onClick={fetchOverview}
             disabled={loading}
-            className="bg-white dark:bg-[#1C1116] border! border-border text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
+            className="rounded-md bg-white dark:bg-[#1C1116] border! border-border! text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
             <span>Recalculate</span>
@@ -213,7 +213,7 @@ export function ProfitGuardianWidget() {
       {/* Top 4 Guardian KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1 */}
-        <Card className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
+        <Card className="border! border-border! bg-white dark:bg-[#1C1116] rounded-lg shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
               <CardDescription className="text-[11px] font-semibold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
@@ -233,7 +233,7 @@ export function ProfitGuardianWidget() {
         </Card>
 
         {/* Card 2 */}
-        <Card className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
+        <Card className="border! border-border! bg-white dark:bg-[#1C1116] rounded-lg shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
               <CardDescription className="text-[11px] font-semibold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
@@ -253,7 +253,7 @@ export function ProfitGuardianWidget() {
         </Card>
 
         {/* Card 3 */}
-        <Card className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
+        <Card className="border! border-border! bg-white dark:bg-[#1C1116] rounded-lg shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
               <CardDescription className="text-[11px] font-semibold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
@@ -273,7 +273,7 @@ export function ProfitGuardianWidget() {
         </Card>
 
         {/* Card 4 */}
-        <Card className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
+        <Card className="border! border-border! bg-white dark:bg-[#1C1116] rounded-lg shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
               <CardDescription className="text-[11px] font-semibold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
@@ -302,13 +302,13 @@ export function ProfitGuardianWidget() {
               <ShieldAlert className="h-4 w-4 text-[#A4193D]" />
               <span>Urgent Profit Risk Queue</span>
             </h3>
-            <Badge variant="outline" className="text-xs font-mono border! border-border">
+            <Badge variant="outline" className="rounded-md text-xs font-mono border! border-border!">
               {incidents.length} Open Alerts
             </Badge>
           </div>
 
           {incidents.length === 0 ? (
-            <Card className="p-6 text-center border! border-border bg-white dark:bg-[#1C1116] rounded-2xl">
+            <Card className="p-6 text-center border! border-border! bg-white dark:bg-[#1C1116] rounded-lg">
               <CheckCircle2 className="h-8 w-8 text-emerald-500 mx-auto mb-1.5" />
               <h4 className="font-semibold text-sm">All Profit Incidents Resolved</h4>
               <p className="text-xs text-[#6E5F64] dark:text-[#A8949A]">
@@ -339,12 +339,12 @@ export function ProfitGuardianWidget() {
                 return (
                   <Card
                     key={inc.id}
-                    className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs overflow-hidden"
+                    className="border! border-border! bg-white dark:bg-[#1C1116] rounded-lg shadow-xs overflow-hidden"
                   >
                     <CardHeader className="p-4 pb-2">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
-                          <Badge className={`text-[10px] font-semibold border ${typeColor}`}>
+                          <Badge className={`rounded-md text-[10px] font-semibold border ${typeColor}`}>
                             {typeLabel}
                           </Badge>
                           <span className="text-xs font-semibold text-[#181113] dark:text-[#FBF6F0]">
@@ -355,7 +355,7 @@ export function ProfitGuardianWidget() {
                           <span className="text-xs text-[#6E5F64] dark:text-[#A8949A]">
                             At Risk: <strong className="text-[#A4193D] font-mono">₦{inc.financialImpact.toLocaleString()}</strong>
                           </span>
-                          <span className="text-[10px] font-mono font-semibold bg-[#FAF7F2] dark:bg-[#120A0D] px-2 py-0.5 rounded-sm border! border-border">
+                          <span className="text-[10px] font-mono font-semibold bg-[#FAF7F2] dark:bg-[#120A0D] px-2 py-0.5 rounded-md border! border-border!">
                             Score: {inc.urgencyScore}
                           </span>
                         </div>
@@ -363,7 +363,7 @@ export function ProfitGuardianWidget() {
                     </CardHeader>
 
                     <CardContent className="p-4 pt-1 space-y-2.5 text-xs">
-                      <div className="bg-[#FAF7F2] dark:bg-[#120A0D] p-3 rounded-xl border! border-border space-y-1">
+                      <div className="bg-[#FAF7F2] dark:bg-[#120A0D] p-3 rounded-md border! border-border! space-y-1">
                         <div className="font-semibold text-[#181113] dark:text-[#FBF6F0]">Reason:</div>
                         <p className="text-[#5A4B50] dark:text-[#C5B3B8] leading-relaxed">{inc.reason}</p>
                         {inc.recommendedAction && (
@@ -378,20 +378,20 @@ export function ProfitGuardianWidget() {
                           <div className="text-[10px] font-semibold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
                             Auto-Drafted WhatsApp Recovery Message
                           </div>
-                          <div className="p-2.5 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border! border-emerald-300/60 dark:border-emerald-800/40 text-emerald-950 dark:text-emerald-200 font-mono text-[11px] leading-relaxed">
+                          <div className="p-2.5 rounded-md bg-emerald-50/50 dark:bg-emerald-950/20 border! border-emerald-300/60 dark:border-emerald-800/40 text-emerald-950 dark:text-emerald-200 font-mono text-[11px] leading-relaxed">
                             &ldquo;{inc.draftedMessage}&rdquo;
                           </div>
                         </div>
                       )}
 
-                      <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
+                      <div className="flex items-center justify-end gap-2 pt-2 border-t border-border!">
                         {inc.draftedMessage && (
                           <>
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => handleCopyMessage(inc.draftedMessage!, inc.id)}
-                              className="h-7 text-xs font-semibold flex items-center gap-1 cursor-pointer bg-white dark:bg-[#1C1116] border! border-border"
+                              className="h-7 rounded-md text-xs font-semibold flex items-center gap-1 cursor-pointer bg-white dark:bg-[#1C1116] border! border-border!"
                             >
                               {copiedId === inc.id ? (
                                 <>
@@ -410,7 +410,7 @@ export function ProfitGuardianWidget() {
                               href={whatsappUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 h-7 px-2.5 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-semibold transition-colors"
+                              className="inline-flex items-center gap-1 h-7 px-2.5 rounded-md bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-semibold transition-colors"
                             >
                               <Phone className="h-3 w-3" />
                               <span>Send on WhatsApp</span>
@@ -422,7 +422,7 @@ export function ProfitGuardianWidget() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleResolveIncident(inc.id)}
-                          className="h-7 text-xs text-[#6E5F64] dark:text-[#A8949A] hover:text-emerald-600 cursor-pointer"
+                          className="h-7 rounded-md text-xs text-[#6E5F64] dark:text-[#A8949A] hover:text-emerald-600 cursor-pointer"
                         >
                           <CheckCircle2 className="h-3 w-3 mr-1" />
                           <span>Resolve</span>
@@ -443,7 +443,7 @@ export function ProfitGuardianWidget() {
             <span>Material Cost Simulator</span>
           </h3>
 
-          <Card className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
+          <Card className="border! border-border! bg-white dark:bg-[#1C1116] rounded-lg shadow-xs">
             <CardHeader className="p-4 pb-2">
               <CardTitle className="text-xs font-semibold">Simulate Market Cost Spike</CardTitle>
               <CardDescription className="text-[11px] text-[#6E5F64] dark:text-[#A8949A]">
@@ -461,7 +461,7 @@ export function ProfitGuardianWidget() {
                     const m = data?.materials.find((item) => item.id === e.target.value);
                     if (m) setNewCostInput(String(m.unitCost));
                   }}
-                  className="w-full p-2 rounded-lg border! border-border bg-[#FAF7F2] dark:bg-[#120A0D] text-xs"
+                  className="w-full p-2 rounded-md border! border-border! bg-[#FAF7F2] dark:bg-[#120A0D] text-xs"
                 >
                   {(data?.materials || []).map((m) => (
                     <option key={m.id} value={m.id}>
@@ -477,14 +477,14 @@ export function ProfitGuardianWidget() {
                   type="number"
                   value={newCostInput}
                   onChange={(e) => setNewCostInput(e.target.value)}
-                  className="w-full p-2 rounded-lg border! border-border bg-[#FAF7F2] dark:bg-[#120A0D] text-xs font-mono font-semibold"
+                  className="w-full p-2 rounded-md border! border-border! bg-[#FAF7F2] dark:bg-[#120A0D] text-xs font-mono font-semibold"
                 />
               </div>
 
               <Button
                 onClick={handleRunSimulation}
                 disabled={isSimulating}
-                className="w-full bg-[#A4193D] hover:bg-[#8A1432] text-[#FFDFB9] font-semibold text-xs h-8 cursor-pointer shadow-xs"
+                className="w-full rounded-md bg-[#A4193D] hover:bg-[#8A1432] text-[#FFDFB9] font-semibold text-xs h-8 cursor-pointer shadow-xs"
               >
                 {isSimulating ? (
                   <>
@@ -500,7 +500,7 @@ export function ProfitGuardianWidget() {
               </Button>
 
               {simMessage && (
-                <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border! border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-[11px]">
+                <div className="p-2.5 rounded-md bg-emerald-50 dark:bg-emerald-950/20 border! border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-[11px]">
                   {simMessage}
                 </div>
               )}
@@ -508,7 +508,7 @@ export function ProfitGuardianWidget() {
           </Card>
 
           {/* Live Job Margin Monitor Mini-Table */}
-          <Card className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
+          <Card className="border! border-border! bg-white dark:bg-[#1C1116] rounded-lg shadow-xs">
             <CardHeader className="p-4 pb-2">
               <CardTitle className="text-xs font-semibold flex items-center justify-between">
                 <span>Active Job Profitability</span>
@@ -519,7 +519,7 @@ export function ProfitGuardianWidget() {
               {(data?.jobs || []).slice(0, 4).map((j) => (
                 <div
                   key={j.id}
-                  className="p-2 rounded-xl bg-[#FAF7F2] dark:bg-[#120A0D] border! border-border flex items-center justify-between"
+                  className="p-2 rounded-md bg-[#FAF7F2] dark:bg-[#120A0D] border! border-border! flex items-center justify-between"
                 >
                   <div className="pr-2">
                     <div className="font-semibold text-[#181113] dark:text-[#FBF6F0] line-clamp-1 text-[11px]">
@@ -531,13 +531,12 @@ export function ProfitGuardianWidget() {
                   </div>
 
                   <Badge
-                    className={`text-[9px] font-mono font-semibold shrink-0 ${
-                      j.marginPercent >= 30
-                        ? "bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-300"
-                        : j.marginPercent >= 15
+                    className={`rounded-md text-[9px] font-mono font-semibold shrink-0 ${j.marginPercent >= 30
+                      ? "bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-300"
+                      : j.marginPercent >= 15
                         ? "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/30 dark:text-amber-300"
                         : "bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-950/30 dark:text-rose-300"
-                    }`}
+                      }`}
                   >
                     {j.marginPercent}% Margin
                   </Badge>
@@ -551,7 +550,7 @@ export function ProfitGuardianWidget() {
       {/* Weekly Report Modal */}
       {isReportOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1C1116] border! border-border rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
+          <div className="bg-white dark:bg-[#1C1116] border! border-border! rounded-lg max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-[#A4193D]" />
@@ -561,7 +560,7 @@ export function ProfitGuardianWidget() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsReportOpen(false)}
-                className="h-8 w-8 p-0 rounded-full cursor-pointer"
+                className="h-8 w-8 p-0 rounded-md cursor-pointer"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -573,7 +572,7 @@ export function ProfitGuardianWidget() {
                 <p className="text-sm font-semibold">Aggregating job profits and generating briefing...</p>
               </div>
             ) : (
-              <div className="prose prose-stone dark:prose-invert max-w-none text-xs leading-relaxed whitespace-pre-wrap font-mono bg-[#FAF7F2] dark:bg-[#120A0D] p-4 rounded-xl border! border-border">
+              <div className="prose prose-stone dark:prose-invert max-w-none text-xs leading-relaxed whitespace-pre-wrap font-mono bg-[#FAF7F2] dark:bg-[#120A0D] p-4 rounded-md border! border-border!">
                 {reportMarkdown}
               </div>
             )}
@@ -585,7 +584,7 @@ export function ProfitGuardianWidget() {
                   navigator.clipboard.writeText(reportMarkdown);
                   alert("Report copied to clipboard.");
                 }}
-                className="bg-[#A4193D] text-[#FFDFB9] font-semibold text-xs cursor-pointer shadow-xs"
+                className="rounded-md bg-[#A4193D] text-[#FFDFB9] font-semibold text-xs cursor-pointer shadow-xs"
               >
                 Copy Report
               </Button>
@@ -593,7 +592,7 @@ export function ProfitGuardianWidget() {
                 variant="outline"
                 size="sm"
                 onClick={() => setIsReportOpen(false)}
-                className="text-xs font-semibold cursor-pointer border! border-border"
+                className="rounded-md text-xs font-semibold cursor-pointer border! border-border!"
               >
                 Close
               </Button>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
@@ -55,7 +55,7 @@ interface ChatMessage {
   quoteSummary?: QuoteSummary | null;
 }
 
-const SESSION_THREAD_KEY = "printos_chat_thread_id";
+const SESSION_THREAD_KEY = "printos_chat_active_thread";
 
 /**
  * Animated Typing indicator with contextual Nigerian workshop status
@@ -140,13 +140,8 @@ function AIReasoningAccordion({
   thinking: string;
   isStreaming?: boolean;
 }) {
-  const [isOpen, setIsOpen] = useState(isStreaming);
-
-  useEffect(() => {
-    if (isStreaming && thinking) {
-      setIsOpen(true);
-    }
-  }, [isStreaming, thinking]);
+  const [isOpen, setIsOpen] = useState(false);
+  const isExpanded = isOpen || isStreaming;
 
   if (!thinking) return null;
 
@@ -161,10 +156,10 @@ function AIReasoningAccordion({
           <Brain className={cn("h-3.5 w-3.5 text-[#A4193D] dark:text-[#FFDFB9]", isStreaming && "animate-pulse")} />
           <span>{isStreaming ? "Diagnostic reasoning in progress..." : "View diagnostic thought process"}</span>
         </div>
-        {isOpen ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+        {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
       </button>
 
-      {isOpen && (
+      {isExpanded && (
         <div className="px-3 pb-2.5 pt-1 text-[11px] font-mono leading-relaxed text-[#5A4B50] dark:text-[#C5B3B8] border-t border-[#EADDCF]/60 dark:border-[#2E1C23]/60 bg-white/40 dark:bg-black/20 whitespace-pre-wrap">
           {thinking}
         </div>
@@ -214,6 +209,9 @@ function extractQuoteSummary(text: string): QuoteSummary | null {
   };
 }
 
+const DEFAULT_PANEL_WIDTH = 480;
+const MIN_PANEL_WIDTH = 360;
+
 export function QuoteChatDrawer({
   isOpen,
   onClose,
@@ -223,7 +221,23 @@ export function QuoteChatDrawer({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
-  const [conversationId, setConversationId] = useState<string>("");
+  const [conversationId, setConversationId] = useState<string>(() => {
+    if (typeof window === "undefined") return "";
+    let saved = sessionStorage.getItem(SESSION_THREAD_KEY);
+    if (!saved) {
+      saved = `thread-${Date.now()}`;
+      sessionStorage.setItem(SESSION_THREAD_KEY, saved);
+    }
+    return saved;
+  });
+  const [panelWidth, setPanelWidth] = useState<number>(() => {
+    if (typeof window === "undefined") return DEFAULT_PANEL_WIDTH;
+    const saved = localStorage.getItem("printos_chat_panel_width");
+    const parsed = saved ? parseInt(saved, 10) : DEFAULT_PANEL_WIDTH;
+    return isNaN(parsed) ? DEFAULT_PANEL_WIDTH : Math.max(MIN_PANEL_WIDTH, Math.min(parsed, 1100));
+  });
+  const [isResizing, setIsResizing] = useState(false);
+
   const abortControllerRef = useRef<AbortController | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -242,76 +256,43 @@ export function QuoteChatDrawer({
     }
   };
 
-  // Initialize or resume persistent session when drawer opens
-  useEffect(() => {
-    if (!isOpen) return;
+  const handleResetWidth = useCallback(() => {
+    setPanelWidth(DEFAULT_PANEL_WIDTH);
+    localStorage.setItem("printos_chat_panel_width", String(DEFAULT_PANEL_WIDTH));
+  }, []);
 
-    let savedThreadId = typeof window !== "undefined" ? sessionStorage.getItem(SESSION_THREAD_KEY) : null;
+  const startResizing = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+    const startX = e.clientX;
+    const startWidth = panelWidth;
 
-    if (!savedThreadId) {
-      savedThreadId = `thread-${Date.now()}`;
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem(SESSION_THREAD_KEY, savedThreadId);
-      }
-    }
-    setConversationId(savedThreadId);
-
-    const initChat = async () => {
-      // 1. If an initial prompt was provided (e.g. from Hero), send it directly
-      if (initialPrompt) {
-        handleSendMessage(initialPrompt, savedThreadId);
-        return;
-      }
-
-      // 2. Try to restore previous conversation from this session
-      try {
-        const res = await fetch(`/api/chat/turn?threadId=${savedThreadId}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.messages && data.messages.length > 0) {
-            setMessages(
-              data.messages.map((m: any) => ({
-                id: m.id,
-                role: m.role,
-                content: m.content,
-                timestamp: m.timestamp || new Date().toISOString(),
-                quoteSummary: extractQuoteSummary(m.content),
-              }))
-            );
-            return;
-          }
-        }
-      } catch {
-        // Fallback to welcome message
-      }
-
-      // 3. Render welcome message
-      const matchedService = PRINT_SERVICES.find((s) => s.id === prefillServiceId);
-      if (matchedService) {
-        setMessages([
-          {
-            id: "welcome-1",
-            role: "assistant",
-            content: `Hi there! 👋 Let's get your **${matchedService.name}** calculated in seconds.\n\nTell me: **how many units or pieces do you need**, and what dimensions or design style?`,
-            timestamp: new Date().toISOString(),
-          },
-        ]);
-      } else {
-        setMessages([
-          {
-            id: "welcome-default",
-            role: "assistant",
-            content: `Welcome to PrintOS! 🖨️✨ I can calculate instant, mathematically guaranteed print quotes.\n\nTell me what you'd like to produce (e.g. *"I want to frame a family portrait"*, *"50 black cotton t-shirts for an event"*, or *"10x4ft outdoor flex banner"*). No print jargon needed!`,
-            timestamp: new Date().toISOString(),
-          },
-        ]);
-      }
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      const deltaX = startX - moveEvent.clientX;
+      const maxWidth = Math.min(window.innerWidth * 0.85, 1100);
+      const nextWidth = Math.max(MIN_PANEL_WIDTH, Math.min(startWidth + deltaX, maxWidth));
+      setPanelWidth(nextWidth);
     };
 
-    initChat();
-  }, [isOpen, prefillServiceId, initialPrompt]);
+    const onMouseUp = () => {
+      setIsResizing(false);
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+      setPanelWidth((curr) => {
+        localStorage.setItem("printos_chat_panel_width", String(curr));
+        return curr;
+      });
+    };
 
-  const handleResetChat = () => {
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  }, [panelWidth]);
+
+  const handleResetChat = useCallback(() => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -329,16 +310,16 @@ export function QuoteChatDrawer({
       },
     ]);
     setIsStreaming(false);
-  };
+  }, []);
 
-  const handleStopStream = () => {
+  const handleStopStream = useCallback(() => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       setIsStreaming(false);
     }
-  };
+  }, []);
 
-  const handleSendMessage = async (textToSend?: string, overrideThreadId?: string) => {
+  const handleSendMessage = useCallback(async (textToSend?: string, overrideThreadId?: string) => {
     const messageContent = (textToSend || input).trim();
     if (!messageContent || isStreaming) return;
 
@@ -386,7 +367,7 @@ export function QuoteChatDrawer({
       });
 
       if (!res.ok || !res.body) {
-        throw new Error(`HTTP error! status: ${res.status}`);
+        throw new Error(`Server returned error status ${res.status}`);
       }
 
       const reader = res.body.getReader();
@@ -429,34 +410,118 @@ export function QuoteChatDrawer({
       );
       setIsStreaming(false);
     } catch (err: unknown) {
-      if (err instanceof Error && err.name === "AbortError") {
+      if (err instanceof Error && (err.name === "AbortError" || err.message.includes("abort"))) {
         setIsStreaming(false);
         return;
       }
-      console.error("Error during streaming turn:", err);
+      console.warn("⚠️ Handled turn error:", err);
       setIsStreaming(false);
+
+      const userFriendlyError =
+        "⚠️ **Workshop Connection Delay**\n\nI couldn't complete that calculation right away due to a momentary network delay with our workshop servers.\n\nPlease click **Send** to try again, or chat directly with our team on WhatsApp at **+234 802 000 0000**.";
+
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === assistantMsgId
             ? {
                 ...msg,
-                content:
-                  msg.content ||
-                  "Let me calculate that for you! How many pieces or dimensions do you need?",
+                content: msg.content ? `${msg.content}\n\n${userFriendlyError}` : userFriendlyError,
                 isStreaming: false,
               }
             : msg
         )
       );
     }
-  };
+  }, [input, isStreaming, conversationId, messages, prefillServiceId]);
+
+  // Initialize or resume persistent session when drawer opens
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const threadToUse = conversationId || (typeof window !== "undefined" ? sessionStorage.getItem(SESSION_THREAD_KEY) : null) || `thread-${Date.now()}`;
+
+    const initChat = async () => {
+      // 1. If an initial prompt was provided (e.g. from Hero), send it directly
+      if (initialPrompt) {
+        handleSendMessage(initialPrompt, threadToUse);
+        return;
+      }
+
+      // 2. Try to restore previous conversation from this session
+      try {
+        const res = await fetch(`/api/chat/turn?threadId=${threadToUse}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.messages && data.messages.length > 0) {
+            setMessages(
+              data.messages.map((m: any) => ({
+                id: m.id,
+                role: m.role,
+                content: m.content,
+                timestamp: m.timestamp || new Date().toISOString(),
+                quoteSummary: extractQuoteSummary(m.content),
+              }))
+            );
+            return;
+          }
+        }
+      } catch {
+        // Fallback to welcome message
+      }
+
+      // 3. Render welcome message
+      const matchedService = PRINT_SERVICES.find((s) => s.id === prefillServiceId);
+      if (matchedService) {
+        setMessages([
+          {
+            id: "welcome-1",
+            role: "assistant",
+            content: `Hi there! 👋 Let's get your **${matchedService.name}** calculated in seconds.\n\nTell me: **how many units or pieces do you need**, and what dimensions or design style?`,
+            timestamp: new Date().toISOString(),
+          },
+        ]);
+      } else {
+        setMessages([
+          {
+            id: "welcome-default",
+            role: "assistant",
+            content: `Welcome to PrintOS! 🖨️✨ I can calculate instant, mathematically guaranteed print quotes.\n\nTell me what you'd like to produce (e.g. *"I want to frame a family portrait"*, *"50 black cotton t-shirts for an event"*, or *"10x4ft outdoor flex banner"*). No print jargon needed!`,
+            timestamp: new Date().toISOString(),
+          },
+        ]);
+      }
+    };
+
+    initChat();
+  }, [isOpen, prefillServiceId, initialPrompt, handleSendMessage, conversationId]);
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <SheetContent
         side="right"
-        className="flex flex-col p-0 gap-0 w-full sm:max-w-lg bg-[#FAF7F2] dark:bg-[#120A0D] border-l border-[#EADDCF] dark:border-[#2E1C23] shadow-2xl"
+        style={{ width: `${panelWidth}px`, maxWidth: "100vw" }}
+        className={cn(
+          "flex flex-col p-0 gap-0 w-full sm:max-w-none bg-[#FAF7F2] dark:bg-[#120A0D] border-l border-[#EADDCF] dark:border-[#2E1C23] shadow-2xl relative",
+          isResizing && "select-none transition-none"
+        )}
       >
+        {/* Desktop Drag-to-Resize Handle on Left Border */}
+        <div
+          onMouseDown={startResizing}
+          onDoubleClick={handleResetWidth}
+          title="Drag to resize width, double-click to reset (480px)"
+          className={cn(
+            "hidden sm:flex absolute top-0 bottom-0 -left-1.5 w-3 cursor-col-resize z-30 group items-center justify-center hover:bg-[#A4193D]/10 transition-colors",
+            isResizing && "bg-[#A4193D]/20"
+          )}
+        >
+          <div
+            className={cn(
+              "w-[2px] h-12 rounded-full bg-[#EADDCF] dark:bg-[#331D25] group-hover:bg-[#A4193D] group-hover:w-[3px] transition-all",
+              isResizing && "bg-[#A4193D] w-[3px] h-20"
+            )}
+          />
+        </div>
         {/* Solid Opaque Header */}
         <SheetHeader className="p-4 sm:p-5 border-b border-[#EADDCF] dark:border-[#2E1C23] bg-white dark:bg-[#1C1116]">
           <div className="flex items-center justify-between pr-8">

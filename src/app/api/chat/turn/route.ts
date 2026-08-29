@@ -109,7 +109,14 @@ export async function POST(req: NextRequest) {
           controller.close();
         } catch (streamErr) {
           console.error("⚠️ Stream error in /api/chat/turn:", streamErr);
-          controller.error(streamErr);
+          try {
+            const friendlyError =
+              "\n\n⚠️ *I had a momentary connection hiccup with our workshop servers. Please click retry or send your message again!*";
+            controller.enqueue(encoder.encode(friendlyError));
+            controller.close();
+          } catch {
+            controller.error(streamErr);
+          }
         }
       },
     });

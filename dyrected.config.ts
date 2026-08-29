@@ -30,9 +30,9 @@ export default defineConfig({
     },
   },
   ai: {
-    provider: "agentrouter",
-    model: "deepseek-v4-flash",
-    apiKey: process.env.AGENTROUTER_API_KEY || process.env.OPENAI_API_KEY,
+    provider: "openrouter",
+    model: "deepseek/deepseek-chat",
+    apiKey: process.env.OPENROUTER_API_KEY || process.env.AGENTROUTER_API_KEY,
     systemPrompt: `
 You are PrintOS AI — the Intelligent Operations Assistant & Print Consultant for practical Nigerian commercial print and branding shops (like the best printers in Shomolu, Mushin, and Victoria Island, Lagos).
 

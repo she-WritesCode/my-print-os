@@ -114,19 +114,20 @@ Your user is a walk-in or website customer looking to print, frame, or brand ite
      | **30% Balance** | **₦19,200** (on delivery) |
 
    - Ask for contact info smartly:
-     • If you ALREADY know the customer's name (e.g. Busola), do NOT ask for their name again! Simply ask: "What is your WhatsApp number so I can save your quote and prepare your production order?"
+     • If you ALREADY know the customer's name, do NOT ask for their name again! Simply ask: "What is your WhatsApp number so I can save your quote and prepare your production order?"
      • Only ask for their name if it is not yet known.
 
    - MANDATORY TOOL CALLING (CRITICAL):
      • THE MOMENT the customer provides their WhatsApp / phone number (or name + phone number), YOU MUST CALL THE 'saveCustomerOrder' TOOL.
+     • If an order reference (e.g. 'ORD-2026-XXXX') was ALREADY created earlier in this conversation, and the customer updates their name, email, phone number, quantity, size, or notes, YOU MUST PASS 'orderNumber: "<EXISTING_ORDER_NUMBER>"' so the database updates the existing order instead of creating a duplicate order!
      • You CANNOT create or guarantee an order reference number by yourself. You MUST use the exact 'orderNumber' returned by 'saveCustomerOrder'.
-     • Once 'saveCustomerOrder' succeeds, confirm the official orderNumber returned by the tool (e.g. "Thanks Busola! I've saved your details and created order reference {orderNumber} in our workshop system.").
+     • Once 'saveCustomerOrder' succeeds, confirm the official orderNumber returned by the tool (e.g. "Thanks Busola! I've saved your details and updated order reference {orderNumber} in our workshop system.").
      • NEVER tell the customer to send photos to their own number. Direct them to send soft copies to the Shop's official WhatsApp line: **+234 802 000 0000** or use the in-chat quote button.
 
 4. CUSTOMER FINANCIAL LANGUAGE:
-   - "Customer will pay" (Total price)
-   - "70% Deposit" (to purchase materials & blanks so production starts immediately)
-   - "30% Balance on delivery" (paid when job is ready for pickup/dispatch)
+    - "Customer will pay" (Total price)
+    - "70% Deposit" (to purchase materials & blanks so production starts immediately)
+    - "30% Balance on delivery" (paid when job is ready for pickup/dispatch)
     `,
     tools: {
       calculatePrintQuote: {
@@ -159,90 +160,202 @@ Your user is a walk-in or website customer looking to print, frame, or brand ite
       },
       saveCustomerOrder: {
         description:
-          "CRITICAL ACTION TOOL: Call this tool immediately when the customer provides their phone/WhatsApp number or confirms the order. This creates the official Customer record and Order in the database and returns the official orderNumber.",
+          "CRITICAL ACTION TOOL: Call this tool immediately when the customer provides their phone/WhatsApp number, email, or confirms the order. This finds or creates the official Customer and Order in the database and returns the official orderNumber.",
         parameters: z.object({
+          orderNumber: z
+            .string()
+            .optional()
+            .describe("Existing Order reference number if updating an already created order in this thread (e.g. 'ORD-2026-1234')"),
           customerName: z.string().describe("Customer's full name"),
           customerPhone: z.string().describe("Customer's WhatsApp or phone number"),
+          customerEmail: z.string().optional().describe("Customer's email address if provided"),
           item: z.string().describe("Item name e.g. '8x10 Photo Frame'"),
           quantity: z.number().describe("Quantity being produced"),
           spec: z.string().describe("Production specifications and finishing"),
           totalPrice: z.number().describe("Total price in Naira"),
           depositRequired: z.number().describe("70% deposit amount in Naira"),
           balanceDue: z.number().describe("30% balance amount in Naira"),
-          notes: z.string().optional().describe("Important job notes, e.g. 'Customer will WhatsApp 2 soft-copy photos for lab printing'"),
+          notes: z
+            .string()
+            .optional()
+            .describe("Important job notes, e.g. 'Customer will WhatsApp 2 soft-copy photos for lab printing'"),
         }),
         execute: async (input, { db }) => {
           const cleanPhone = input.customerPhone.replace(/\D/g, "");
           const customerId = cleanPhone ? `cust-${cleanPhone}` : `cust-${Date.now()}`;
-          const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-          const orderNumber = `ORD-${new Date().getFullYear()}-${randomSuffix}`;
-          const orderId = `ord-${orderNumber.toLowerCase()}`;
-          const jobId = `job-${orderNumber.toLowerCase()}`;
 
-          // 1. Upsert Customer Record
-          try {
-            await db.create({
-              collection: "customers",
-              data: {
+          // 1. Find or Create / Update Customer Record
+          const existingCustomer = await db
+            .findOne({ collection: "customers", id: customerId })
+            .catch(() => null);
+
+          if (existingCustomer) {
+            await db
+              .update({
+                collection: "customers",
                 id: customerId,
-                name: input.customerName,
-                phone: input.customerPhone,
-                totalSpent: 0,
-                outstandingDebt: 0,
-              },
-            });
-          } catch {
-            await db.update({
-              collection: "customers",
-              id: customerId,
-              data: {
-                name: input.customerName,
-                phone: input.customerPhone,
-              },
-            }).catch(() => null);
+                data: {
+                  name: input.customerName || (existingCustomer.data?.name as string),
+                  phone: input.customerPhone || (existingCustomer.data?.phone as string),
+                  ...(input.customerEmail ? { email: input.customerEmail } : {}),
+                },
+              })
+              .catch(() => null);
+          } else {
+            await db
+              .create({
+                collection: "customers",
+                data: {
+                  id: customerId,
+                  name: input.customerName,
+                  phone: input.customerPhone,
+                  ...(input.customerEmail ? { email: input.customerEmail } : {}),
+                  totalSpent: 0,
+                  outstandingDebt: 0,
+                },
+              })
+              .catch(() => null);
           }
 
-          // 2. Create Customer Order
-          await db.create({
-            collection: "orders",
-            data: {
-              id: orderId,
-              orderNumber,
-              customer: customerId,
-              customerName: input.customerName,
-              customerContact: input.customerPhone,
-              subtotal: input.totalPrice,
-              depositRequired: input.depositRequired,
-              depositPaid: 0,
-              balanceDue: input.balanceDue,
-              paymentStatus: "unpaid",
-              status: "quoteSent",
-            },
-          }).catch(() => null);
+          // 2. Find or Create Order Record
+          let targetOrderNumber = input.orderNumber?.trim();
+          let existingOrder = null;
 
-          // 3. Create Print Job Record
+          if (targetOrderNumber) {
+            const targetOrderId = `ord-${targetOrderNumber.toLowerCase()}`;
+            existingOrder = await db.findOne({ collection: "orders", id: targetOrderId }).catch(() => null);
+            if (!existingOrder) {
+              const findRes = await db
+                .find({ collection: "orders", where: { orderNumber: { equals: targetOrderNumber } }, limit: 1 })
+                .catch(() => null);
+              if (findRes?.docs && findRes.docs.length > 0) {
+                existingOrder = findRes.docs[0];
+              }
+            }
+          }
+
           const estimatedCost = Math.round(input.totalPrice * 0.6);
-          await db.create({
-            collection: "print_jobs",
-            data: {
-              id: jobId,
-              order: orderId,
-              item: input.item,
-              quantity: input.quantity,
-              quotedPrice: input.totalPrice,
-              materialCost: estimatedCost,
-              marginPercent: 40,
-              marginStatus: "healthy",
-              status: "quoted",
-            },
-          }).catch(() => null);
+
+          if (existingOrder) {
+            // Update existing order
+            const orderId = existingOrder.id;
+            targetOrderNumber = (existingOrder.data?.orderNumber || existingOrder.orderNumber || targetOrderNumber) as string;
+
+            await db
+              .update({
+                collection: "orders",
+                id: orderId,
+                data: {
+                  customer: customerId,
+                  customerName: input.customerName,
+                  customerContact: input.customerPhone,
+                  subtotal: input.totalPrice,
+                  depositRequired: input.depositRequired,
+                  balanceDue: input.balanceDue,
+                  notes: input.notes,
+                },
+              })
+              .catch(() => null);
+
+            // Update linked Print Job
+            const existingJobRes = await db
+              .find({ collection: "print_jobs", where: { order: { equals: orderId } }, limit: 1 })
+              .catch(() => null);
+
+            if (existingJobRes?.docs && existingJobRes.docs.length > 0) {
+              await db
+                .update({
+                  collection: "print_jobs",
+                  id: existingJobRes.docs[0].id,
+                  data: {
+                    item: input.item,
+                    quantity: input.quantity,
+                    quotedPrice: input.totalPrice,
+                    materialCost: estimatedCost,
+                  },
+                })
+                .catch(() => null);
+            } else {
+              await db
+                .create({
+                  collection: "print_jobs",
+                  data: {
+                    id: `job-${targetOrderNumber.toLowerCase()}`,
+                    order: orderId,
+                    item: input.item,
+                    quantity: input.quantity,
+                    quotedPrice: input.totalPrice,
+                    materialCost: estimatedCost,
+                    marginPercent: 40,
+                    marginStatus: "healthy",
+                    status: "quoted",
+                  },
+                })
+                .catch(() => null);
+            }
+
+            return {
+              success: true,
+              isUpdated: true,
+              orderNumber: targetOrderNumber,
+              customerName: input.customerName,
+              customerPhone: input.customerPhone,
+              customerEmail: input.customerEmail,
+              message: `Order ${targetOrderNumber} updated with new details for customer ${input.customerName}.`,
+            };
+          }
+
+          // Create new Order Record
+          const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+          const newOrderNumber = `ORD-${new Date().getFullYear()}-${randomSuffix}`;
+          const newOrderId = `ord-${newOrderNumber.toLowerCase()}`;
+          const newJobId = `job-${newOrderNumber.toLowerCase()}`;
+
+          await db
+            .create({
+              collection: "orders",
+              data: {
+                id: newOrderId,
+                orderNumber: newOrderNumber,
+                customer: customerId,
+                customerName: input.customerName,
+                customerContact: input.customerPhone,
+                subtotal: input.totalPrice,
+                depositRequired: input.depositRequired,
+                depositPaid: 0,
+                balanceDue: input.balanceDue,
+                paymentStatus: "unpaid",
+                status: "quoteSent",
+                notes: input.notes,
+              },
+            })
+            .catch(() => null);
+
+          await db
+            .create({
+              collection: "print_jobs",
+              data: {
+                id: newJobId,
+                order: newOrderId,
+                item: input.item,
+                quantity: input.quantity,
+                quotedPrice: input.totalPrice,
+                materialCost: estimatedCost,
+                marginPercent: 40,
+                marginStatus: "healthy",
+                status: "quoted",
+              },
+            })
+            .catch(() => null);
 
           return {
             success: true,
-            orderNumber,
+            isUpdated: false,
+            orderNumber: newOrderNumber,
             customerName: input.customerName,
             customerPhone: input.customerPhone,
-            message: `Order ${orderNumber} and customer profile for ${input.customerName} successfully saved in workshop database.`,
+            customerEmail: input.customerEmail,
+            message: `Order ${newOrderNumber} and customer profile for ${input.customerName} successfully created in workshop database.`,
           };
         },
       },

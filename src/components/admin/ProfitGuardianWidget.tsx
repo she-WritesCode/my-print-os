@@ -10,11 +10,11 @@ import {
   Check,
   Phone,
   RefreshCw,
-  FileText,
   Sliders,
-  Flame,
+  DollarSign,
   CheckCircle2,
   Sparkles,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -86,7 +86,7 @@ export function ProfitGuardianWidget() {
         }
       }
     } catch (err) {
-      console.warn("⚠️ Failed to load guardian data:", err);
+      console.warn("Failed to load guardian data:", err);
     } finally {
       setLoading(false);
     }
@@ -169,21 +169,20 @@ export function ProfitGuardianWidget() {
   );
 
   return (
-    <div className="w-full mb-8 rounded-3xl border border-border bg-white/70 dark:bg-[#160E12]/70 p-5 sm:p-6 shadow-sm backdrop-blur-xs space-y-6">
+    <div className="w-full mb-8 space-y-6">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-linear-to-r from-[#A4193D]/10 via-[#FAF7F2] to-[#FFDFB9]/20 dark:from-[#A4193D]/20 dark:via-[#160D11] dark:to-[#2A151D] border border-border shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-white dark:bg-[#160D11] border! border-border shadow-xs">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#A4193D] dark:text-[#FFDFB9]">
-              PrintOS Operations Guardian • Live Engine
+            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
+              Operations Guardian
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black font-serif text-[#181113] dark:text-[#FBF6F0]">
+          <h2 className="text-xl sm:text-2xl font-bold font-serif text-[#181113] dark:text-[#FBF6F0]">
             Shop Profitability & Cost Guardian
           </h2>
           <p className="text-xs text-[#6E5F64] dark:text-[#A8949A] mt-0.5">
-            Real-time gross margins, material cost inflation detection, and customer debt recovery for Nigerian commercial printers.
+            Real-time gross margins, material cost inflation detection, and customer debt recovery.
           </p>
         </div>
 
@@ -192,10 +191,10 @@ export function ProfitGuardianWidget() {
             variant="outline"
             size="sm"
             onClick={handleGenerateWeeklyReport}
-            className="bg-white dark:bg-[#1C1116] border-border text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+            className="bg-white dark:bg-[#1C1116] border! border-border text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
           >
             <Sparkles className="h-3.5 w-3.5 text-[#A4193D]" />
-            <span>Weekly AI Briefing</span>
+            <span>Weekly AI Report</span>
           </Button>
 
           <Button
@@ -203,7 +202,7 @@ export function ProfitGuardianWidget() {
             size="sm"
             onClick={fetchOverview}
             disabled={loading}
-            className="bg-white dark:bg-[#1C1116] border-border text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+            className="bg-white dark:bg-[#1C1116] border! border-border text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
             <span>Recalculate</span>
@@ -214,35 +213,35 @@ export function ProfitGuardianWidget() {
       {/* Top 4 Guardian KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1 */}
-        <Card className="border border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
+        <Card className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <CardDescription className="text-[11px] font-bold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
+              <CardDescription className="text-[11px] font-semibold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
                 Net Active Profit Margin
               </CardDescription>
               <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <CardTitle className="text-2xl sm:text-3xl font-black font-mono text-emerald-600 dark:text-emerald-400">
+            <CardTitle className="text-2xl sm:text-3xl font-bold font-mono text-emerald-600 dark:text-emerald-400">
               {kpis.netActiveMargin}%
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0">
             <p className="text-[11px] text-[#6E5F64] dark:text-[#A8949A]">
-              Target: <span className="font-bold">&gt; 30%</span> on production jobs
+              Target: <span className="font-semibold">&gt; 30%</span> on production jobs
             </p>
           </CardContent>
         </Card>
 
         {/* Card 2 */}
-        <Card className="border border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
+        <Card className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <CardDescription className="text-[11px] font-bold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
-                Money at Risk (Cost Spikes)
+              <CardDescription className="text-[11px] font-semibold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
+                Money at Risk
               </CardDescription>
-              <Flame className="h-4 w-4 text-[#A4193D] dark:text-[#FFDFB9]" />
+              <DollarSign className="h-4 w-4 text-[#A4193D] dark:text-[#FFDFB9]" />
             </div>
-            <CardTitle className="text-2xl sm:text-3xl font-black font-mono text-[#A4193D] dark:text-[#FFDFB9]">
+            <CardTitle className="text-2xl sm:text-3xl font-bold font-mono text-[#A4193D] dark:text-[#FFDFB9]">
               ₦{kpis.totalNairaAtRisk.toLocaleString()}
             </CardTitle>
           </CardHeader>
@@ -254,15 +253,15 @@ export function ProfitGuardianWidget() {
         </Card>
 
         {/* Card 3 */}
-        <Card className="border border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
+        <Card className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <CardDescription className="text-[11px] font-bold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
-                Customer Still Owes (Debt)
+              <CardDescription className="text-[11px] font-semibold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
+                Customer Balance Due
               </CardDescription>
               <CreditCard className="h-4 w-4 text-amber-600 dark:text-amber-400" />
             </div>
-            <CardTitle className="text-2xl sm:text-3xl font-black font-mono text-amber-600 dark:text-amber-400">
+            <CardTitle className="text-2xl sm:text-3xl font-bold font-mono text-amber-600 dark:text-amber-400">
               ₦{kpis.overdueDebt.toLocaleString()}
             </CardTitle>
           </CardHeader>
@@ -274,21 +273,21 @@ export function ProfitGuardianWidget() {
         </Card>
 
         {/* Card 4 */}
-        <Card className="border border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
+        <Card className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
           <CardHeader className="p-4 pb-2">
             <div className="flex items-center justify-between">
-              <CardDescription className="text-[11px] font-bold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
+              <CardDescription className="text-[11px] font-semibold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
                 Active Profit Alerts
               </CardDescription>
               <ShieldAlert className="h-4 w-4 text-[#A4193D]" />
             </div>
-            <CardTitle className="text-2xl sm:text-3xl font-black font-mono text-[#181113] dark:text-[#FBF6F0]">
+            <CardTitle className="text-2xl sm:text-3xl font-bold font-mono text-[#181113] dark:text-[#FBF6F0]">
               {incidents.length}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0">
             <p className="text-[11px] text-[#6E5F64] dark:text-[#A8949A]">
-              Ranked by exposure × urgency score
+              Ranked by exposure and urgency
             </p>
           </CardContent>
         </Card>
@@ -299,19 +298,19 @@ export function ProfitGuardianWidget() {
         {/* Left 2 Columns: Urgent Profit Risk Queue */}
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-[#181113] dark:text-[#FBF6F0] flex items-center gap-2">
+            <h3 className="text-base font-semibold text-[#181113] dark:text-[#FBF6F0] flex items-center gap-2">
               <ShieldAlert className="h-4 w-4 text-[#A4193D]" />
               <span>Urgent Profit Risk Queue</span>
             </h3>
-            <Badge variant="outline" className="text-xs font-mono border-border">
+            <Badge variant="outline" className="text-xs font-mono border! border-border">
               {incidents.length} Open Alerts
             </Badge>
           </div>
 
           {incidents.length === 0 ? (
-            <Card className="p-6 text-center border border-border bg-white dark:bg-[#1C1116] rounded-2xl">
+            <Card className="p-6 text-center border! border-border bg-white dark:bg-[#1C1116] rounded-2xl">
               <CheckCircle2 className="h-8 w-8 text-emerald-500 mx-auto mb-1.5" />
-              <h4 className="font-bold text-sm">All Profit Incidents Resolved!</h4>
+              <h4 className="font-semibold text-sm">All Profit Incidents Resolved</h4>
               <p className="text-xs text-[#6E5F64] dark:text-[#A8949A]">
                 All active jobs are operating comfortably above the 30% margin threshold.
               </p>
@@ -330,25 +329,25 @@ export function ProfitGuardianWidget() {
 
                 const typeColor =
                   inc.type === "materialPriceSpike"
-                    ? "bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950/40 dark:text-amber-300"
+                    ? "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300"
                     : inc.type === "underquote"
-                    ? "bg-rose-100 text-rose-900 border-rose-300 dark:bg-rose-950/40 dark:text-rose-300"
-                    : "bg-orange-100 text-orange-900 border-orange-300 dark:bg-orange-950/40 dark:text-orange-300";
+                    ? "bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300"
+                    : "bg-orange-50 text-orange-800 border-orange-200 dark:bg-orange-950/40 dark:text-orange-300";
 
                 const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(inc.draftedMessage || "")}`;
 
                 return (
                   <Card
                     key={inc.id}
-                    className="border border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs overflow-hidden"
+                    className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs overflow-hidden"
                   >
                     <CardHeader className="p-4 pb-2">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
-                          <Badge className={`text-[10px] font-bold border ${typeColor}`}>
+                          <Badge className={`text-[10px] font-semibold border ${typeColor}`}>
                             {typeLabel}
                           </Badge>
-                          <span className="text-xs font-bold text-[#181113] dark:text-[#FBF6F0]">
+                          <span className="text-xs font-semibold text-[#181113] dark:text-[#FBF6F0]">
                             {inc.printJobTitle || "Active Order"}
                           </span>
                         </div>
@@ -356,7 +355,7 @@ export function ProfitGuardianWidget() {
                           <span className="text-xs text-[#6E5F64] dark:text-[#A8949A]">
                             At Risk: <strong className="text-[#A4193D] font-mono">₦{inc.financialImpact.toLocaleString()}</strong>
                           </span>
-                          <span className="text-[10px] font-mono font-bold bg-[#FAF7F2] dark:bg-[#120A0D] px-2 py-0.5 rounded-sm border border-border">
+                          <span className="text-[10px] font-mono font-semibold bg-[#FAF7F2] dark:bg-[#120A0D] px-2 py-0.5 rounded-sm border! border-border">
                             Score: {inc.urgencyScore}
                           </span>
                         </div>
@@ -364,22 +363,22 @@ export function ProfitGuardianWidget() {
                     </CardHeader>
 
                     <CardContent className="p-4 pt-1 space-y-2.5 text-xs">
-                      <div className="bg-[#FAF7F2] dark:bg-[#120A0D] p-3 rounded-xl border border-border space-y-1">
-                        <div className="font-bold text-[#181113] dark:text-[#FBF6F0]">⚠️ Why this happened:</div>
+                      <div className="bg-[#FAF7F2] dark:bg-[#120A0D] p-3 rounded-xl border! border-border space-y-1">
+                        <div className="font-semibold text-[#181113] dark:text-[#FBF6F0]">Reason:</div>
                         <p className="text-[#5A4B50] dark:text-[#C5B3B8] leading-relaxed">{inc.reason}</p>
                         {inc.recommendedAction && (
                           <div className="pt-1 text-[#A4193D] dark:text-[#FFDFB9] font-medium">
-                            👉 <strong>Action:</strong> {inc.recommendedAction}
+                            <strong>Recommended Action:</strong> {inc.recommendedAction}
                           </div>
                         )}
                       </div>
 
                       {inc.draftedMessage && (
                         <div className="space-y-1">
-                          <div className="text-[10px] font-bold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
+                          <div className="text-[10px] font-semibold uppercase tracking-wider text-[#6E5F64] dark:text-[#A8949A]">
                             Auto-Drafted WhatsApp Recovery Message
                           </div>
-                          <div className="p-2.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-300 dark:border-emerald-800 text-emerald-950 dark:text-emerald-200 font-mono text-[11px] leading-relaxed">
+                          <div className="p-2.5 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border! border-emerald-300/60 dark:border-emerald-800/40 text-emerald-950 dark:text-emerald-200 font-mono text-[11px] leading-relaxed">
                             &ldquo;{inc.draftedMessage}&rdquo;
                           </div>
                         </div>
@@ -392,12 +391,12 @@ export function ProfitGuardianWidget() {
                               variant="outline"
                               size="sm"
                               onClick={() => handleCopyMessage(inc.draftedMessage!, inc.id)}
-                              className="h-7 text-xs font-semibold flex items-center gap-1 cursor-pointer bg-white dark:bg-[#1C1116] border-border"
+                              className="h-7 text-xs font-semibold flex items-center gap-1 cursor-pointer bg-white dark:bg-[#1C1116] border! border-border"
                             >
                               {copiedId === inc.id ? (
                                 <>
                                   <Check className="h-3 w-3 text-emerald-600" />
-                                  <span>Copied!</span>
+                                  <span>Copied</span>
                                 </>
                               ) : (
                                 <>
@@ -411,7 +410,7 @@ export function ProfitGuardianWidget() {
                               href={whatsappUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 h-7 px-2.5 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold transition-colors"
+                              className="inline-flex items-center gap-1 h-7 px-2.5 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-semibold transition-colors"
                             >
                               <Phone className="h-3 w-3" />
                               <span>Send on WhatsApp</span>
@@ -439,14 +438,14 @@ export function ProfitGuardianWidget() {
 
         {/* Right Column: Material Cost Spike Simulator */}
         <div className="space-y-4">
-          <h3 className="text-base font-bold text-[#181113] dark:text-[#FBF6F0] flex items-center gap-2">
+          <h3 className="text-base font-semibold text-[#181113] dark:text-[#FBF6F0] flex items-center gap-2">
             <Sliders className="h-4 w-4 text-[#A4193D]" />
             <span>Material Cost Simulator</span>
           </h3>
 
-          <Card className="border border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
+          <Card className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
             <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-xs font-bold">Simulate Market Cost Spike</CardTitle>
+              <CardTitle className="text-xs font-semibold">Simulate Market Cost Spike</CardTitle>
               <CardDescription className="text-[11px] text-[#6E5F64] dark:text-[#A8949A]">
                 Test instant cascade recalculation across active jobs.
               </CardDescription>
@@ -454,7 +453,7 @@ export function ProfitGuardianWidget() {
 
             <CardContent className="p-4 pt-1 space-y-3 text-xs">
               <div>
-                <label className="font-bold block mb-1 text-[11px]">Material:</label>
+                <label className="font-semibold block mb-1 text-[11px]">Material:</label>
                 <select
                   value={selectedMaterial}
                   onChange={(e) => {
@@ -462,7 +461,7 @@ export function ProfitGuardianWidget() {
                     const m = data?.materials.find((item) => item.id === e.target.value);
                     if (m) setNewCostInput(String(m.unitCost));
                   }}
-                  className="w-full p-2 rounded-lg border border-border bg-[#FAF7F2] dark:bg-[#120A0D] text-xs"
+                  className="w-full p-2 rounded-lg border! border-border bg-[#FAF7F2] dark:bg-[#120A0D] text-xs"
                 >
                   {(data?.materials || []).map((m) => (
                     <option key={m.id} value={m.id}>
@@ -473,19 +472,19 @@ export function ProfitGuardianWidget() {
               </div>
 
               <div>
-                <label className="font-bold block mb-1 text-[11px]">New Unit Cost (₦):</label>
+                <label className="font-semibold block mb-1 text-[11px]">New Unit Cost (₦):</label>
                 <input
                   type="number"
                   value={newCostInput}
                   onChange={(e) => setNewCostInput(e.target.value)}
-                  className="w-full p-2 rounded-lg border border-border bg-[#FAF7F2] dark:bg-[#120A0D] text-xs font-mono font-bold"
+                  className="w-full p-2 rounded-lg border! border-border bg-[#FAF7F2] dark:bg-[#120A0D] text-xs font-mono font-semibold"
                 />
               </div>
 
               <Button
                 onClick={handleRunSimulation}
                 disabled={isSimulating}
-                className="w-full bg-[#A4193D] hover:bg-[#8A1432] text-[#FFDFB9] font-bold text-xs h-8 cursor-pointer shadow-xs"
+                className="w-full bg-[#A4193D] hover:bg-[#8A1432] text-[#FFDFB9] font-semibold text-xs h-8 cursor-pointer shadow-xs"
               >
                 {isSimulating ? (
                   <>
@@ -501,7 +500,7 @@ export function ProfitGuardianWidget() {
               </Button>
 
               {simMessage && (
-                <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-[11px]">
+                <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border! border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-[11px]">
                   {simMessage}
                 </div>
               )}
@@ -509,9 +508,9 @@ export function ProfitGuardianWidget() {
           </Card>
 
           {/* Live Job Margin Monitor Mini-Table */}
-          <Card className="border border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
+          <Card className="border! border-border bg-white dark:bg-[#1C1116] rounded-2xl shadow-xs">
             <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-xs font-bold flex items-center justify-between">
+              <CardTitle className="text-xs font-semibold flex items-center justify-between">
                 <span>Active Job Profitability</span>
                 <Printer className="h-3.5 w-3.5 text-[#A4193D]" />
               </CardTitle>
@@ -520,10 +519,10 @@ export function ProfitGuardianWidget() {
               {(data?.jobs || []).slice(0, 4).map((j) => (
                 <div
                   key={j.id}
-                  className="p-2 rounded-xl bg-[#FAF7F2] dark:bg-[#120A0D] border border-border flex items-center justify-between"
+                  className="p-2 rounded-xl bg-[#FAF7F2] dark:bg-[#120A0D] border! border-border flex items-center justify-between"
                 >
                   <div className="pr-2">
-                    <div className="font-bold text-[#181113] dark:text-[#FBF6F0] line-clamp-1 text-[11px]">
+                    <div className="font-semibold text-[#181113] dark:text-[#FBF6F0] line-clamp-1 text-[11px]">
                       {j.item}
                     </div>
                     <div className="text-[10px] text-[#6E5F64] dark:text-[#A8949A] font-mono">
@@ -532,12 +531,12 @@ export function ProfitGuardianWidget() {
                   </div>
 
                   <Badge
-                    className={`text-[9px] font-mono font-bold shrink-0 ${
+                    className={`text-[9px] font-mono font-semibold shrink-0 ${
                       j.marginPercent >= 30
-                        ? "bg-emerald-100 text-emerald-800 border-emerald-300"
+                        ? "bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-300"
                         : j.marginPercent >= 15
-                        ? "bg-amber-100 text-amber-800 border-amber-300"
-                        : "bg-rose-100 text-rose-800 border-rose-300"
+                        ? "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/30 dark:text-amber-300"
+                        : "bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-950/30 dark:text-rose-300"
                     }`}
                   >
                     {j.marginPercent}% Margin
@@ -552,7 +551,7 @@ export function ProfitGuardianWidget() {
       {/* Weekly Report Modal */}
       {isReportOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1C1116] border border-border rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
+          <div className="bg-white dark:bg-[#1C1116] border! border-border rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-[#A4193D]" />
@@ -564,7 +563,7 @@ export function ProfitGuardianWidget() {
                 onClick={() => setIsReportOpen(false)}
                 className="h-8 w-8 p-0 rounded-full cursor-pointer"
               >
-                ✕
+                <X className="h-4 w-4" />
               </Button>
             </div>
 
@@ -574,7 +573,7 @@ export function ProfitGuardianWidget() {
                 <p className="text-sm font-semibold">Aggregating job profits and generating briefing...</p>
               </div>
             ) : (
-              <div className="prose prose-stone dark:prose-invert max-w-none text-xs leading-relaxed whitespace-pre-wrap font-mono bg-[#FAF7F2] dark:bg-[#120A0D] p-4 rounded-xl border border-border">
+              <div className="prose prose-stone dark:prose-invert max-w-none text-xs leading-relaxed whitespace-pre-wrap font-mono bg-[#FAF7F2] dark:bg-[#120A0D] p-4 rounded-xl border! border-border">
                 {reportMarkdown}
               </div>
             )}
@@ -584,9 +583,9 @@ export function ProfitGuardianWidget() {
                 size="sm"
                 onClick={() => {
                   navigator.clipboard.writeText(reportMarkdown);
-                  alert("Report copied to clipboard!");
+                  alert("Report copied to clipboard.");
                 }}
-                className="bg-[#A4193D] text-[#FFDFB9] font-bold text-xs cursor-pointer shadow-xs"
+                className="bg-[#A4193D] text-[#FFDFB9] font-semibold text-xs cursor-pointer shadow-xs"
               >
                 Copy Report
               </Button>
@@ -594,7 +593,7 @@ export function ProfitGuardianWidget() {
                 variant="outline"
                 size="sm"
                 onClick={() => setIsReportOpen(false)}
-                className="text-xs font-bold cursor-pointer"
+                className="text-xs font-semibold cursor-pointer border! border-border"
               >
                 Close
               </Button>
